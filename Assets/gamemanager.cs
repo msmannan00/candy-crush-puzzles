@@ -10,7 +10,8 @@ public class gamemanager : MonoBehaviour
     public Light2D light2D;
     public TextMeshProUGUI score;
 
-    public string[] keywords = new string[] { "red", "green", "blue", "orange", "white" };
+    private List<string> currentLevelLightCombination;
+
     protected KeywordRecognizer recognizer;
     public ConfidenceLevel confidence = ConfidenceLevel.Medium;
 
@@ -18,13 +19,20 @@ public class gamemanager : MonoBehaviour
     public float fadeDuration = 3f; // Duration of the color fade in seconds
     public List<string> colorNames;
     Color randomColor = Color.red;
+    private string[] availableColorNames = { "red", "green", "blue", "white", "orange" };
+
+    bool playerResponded = false;
+    private int currentLevel = 1;
+    int currentIndex = 0;
 
 
     private void Start()
     {
-        if (keywords != null)
+        GenerateLightCombination();
+        DisplayLights();
+        if (currentLevelLightCombination != null)
         {
-            recognizer = new KeywordRecognizer(keywords, confidence);
+            recognizer = new KeywordRecognizer(availableColorNames, confidence);
             recognizer.OnPhraseRecognized += Recognizer_OnPhraseRecognized;
             recognizer.Start();
             Debug.Log(recognizer.IsRunning);
@@ -36,24 +44,41 @@ public class gamemanager : MonoBehaviour
         }
     }
 
-    public void ChangeLightColor()
+    private void DisplayLights()
     {
-        // Get a random color name from the list
-        string randomColorName = colorNames[Random.Range(0, colorNames.Count)];
+        StartCoroutine(DisplayLightSequence());
+    }
 
-        // Get the corresponding color based on the color name
-        Color currentRandomColor = GetColorByName(randomColorName, randomColor);
-        if (currentRandomColor == randomColor)
-        {
-            randomColor = Color.white;
-        }
-        else
-        {
-            randomColor = currentRandomColor;
-        }
+    private IEnumerator DisplayLightSequence()
+    {
+        playerResponded = false;
+        StartCoroutine(FadeLightColor(GetColorByName(currentLevelLightCombination[currentIndex]), fadeDuration));
+        StartCoroutine(StartListening());
+        yield return new WaitForSeconds(1f);
+    }
 
-        // Assign the random color to the light object
-        StartCoroutine(FadeLightColor(randomColor, fadeDuration));
+    private IEnumerator StartListening()
+    {
+        float responseTime = currentLevel * 50f + 2f;
+        yield return new WaitForSeconds(responseTime);
+
+        if (!playerResponded)
+        {
+            // Player didn't respond in time, handle accordingly (e.g., game over)
+            Debug.Log("Game over");
+        }
+    }
+
+    private void GenerateLightCombination()
+    {
+        currentLevelLightCombination = new List<string>();
+        int lightCount = currentLevel * 2 + 1;
+
+        for (int i = 0; i < lightCount; i++)
+        {
+            string lightColor = GetRandomColorName();
+            currentLevelLightCombination.Add(lightColor);
+        }
     }
 
     private IEnumerator FadeLightColor(Color targetColor, float duration)
@@ -73,7 +98,13 @@ public class gamemanager : MonoBehaviour
         light2D.color = targetColor;
     }
 
-    private Color GetColorByName(string colorName, Color randomColor)
+    private string GetRandomColorName()
+    {
+        int randomIndex = Random.Range(0, availableColorNames.Length);
+        return availableColorNames[randomIndex];
+    }
+
+    private Color GetColorByName(string colorName)
     {
         switch (colorName)
         {
@@ -96,24 +127,37 @@ public class gamemanager : MonoBehaviour
     private void Recognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
     {
         Debug.Log(args.text);
-        if (colorNames.Contains(args.text))
-        {
-            ChangeLightColor();
-            current_score += 1;
-            score.text = "Score: " + current_score;
-        }
-    }
+        string response = args.text;
+        playerResponded = true;
 
-    private void Update()
-    {
-    }
-
-    private void OnApplicationQuit()
-    {
-        if (recognizer != null && recognizer.IsRunning)
+        if (currentLevelLightCombination.Contains(args.text))
         {
-            recognizer.OnPhraseRecognized -= Recognizer_OnPhraseRecognized;
-            recognizer.Stop();
+
+            if (response == currentLevelLightCombination[currentIndex])
+            {
+                // Correct response
+                currentIndex++;
+                current_score++;
+                if (currentIndex == currentLevelLightCombination.Count)
+                {
+                    Debug.Log("Level complete!");
+                    currentLevel++;
+                    current_score = 0;
+
+                    GenerateLightCombination();
+                    currentIndex = 0;
+                }
+                DisplayLights();
+                playerResponded = false;
+            }
+            else
+            {
+                Debug.Log("Game over");
+            }
         }
+
+
+        score.text = "Level " + currentLevel + "\nScore: " + current_score;
+
     }
 }
