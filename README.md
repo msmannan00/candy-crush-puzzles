@@ -5,29 +5,27 @@
    </head>
    <body>
       <h2>README FILE FOR THIS DEMO JUST FOR FUN</h2><br>
-      <h1>Welcome to Candy Crush!</h1>
-      <p>In this game, your objective is to match candies of the same color in order to clear them from the board and earn points. The more candies you match at once, the more points you will earn.</p>
+      <h1>Welcome to Color Puzzle Game!</h1>
+      <p>In this game, your objective is to guess the correct color based on the given clues. Use your logic and observation skills to solve the puzzles and progress through the levels.</p>
       <h2>Gameplay</h2>
       <ul>
-         <li>To play, simply swipe candies in any direction to swap them with adjacent candies.</li>
-         <li>Matching three candies of the same color will clear them from the board and earn you points.</li>
-         <li>Matching four or more candies of the same color will create special candies that can clear entire rows or columns, or clear all candies of the same color.</li>
-         <li>Each level has a different objective, which could be clearing a certain number of candies, reaching a certain score, or completing a specific task.</li>
-         <li>You have a limited number of moves to complete each level, so use them wisely!</li>
+         <li>To play, examine the provided clues and select the color you believe is the correct answer.</li>
+         <li>If your guess matches the correct color, you will earn points and move on to the next level.</li>
+         <li>Each level presents a different set of clues and colors to guess from.</li>
+         <li>Be careful, as incorrect guesses will result in losing points or a limited number of attempts.</li>
       </ul>
       <h2>Power-Ups</h2>
       <ul>
-         <li>The striped candy can clear an entire row or column of candies when matched with two candies of the same color.</li>
-         <li>The wrapped candy can clear a 3x3 area of candies when matched with two candies of the same color.</li>
-         <li>The color bomb can clear all candies of the same color when matched with any candy.</li>
-         <li>To activate a power-up, simply match it with two candies of the same color.</li>
+         <li>As you progress, you may unlock power-ups that can assist you in your color guessing journey.</li>
+         <li>These power-ups can provide hints, eliminate wrong options, or reveal additional clues to help you make the right guess.</li>
+         <li>Use them strategically to enhance your chances of guessing the correct color.</li>
       </ul>
       <h2>Boosters</h2>
       <ul>
-         <li>Boosters are special items that can help you complete levels more easily.</li>
-         <li>Boosters can be purchased using gold bars, which can be earned by completing levels or purchased with real money.</li>
-         <li>Some examples of boosters are: the lollipop hammer, which can clear any one candy on the board; the jelly fish, which can clear jelly from the board; and the coconut wheel, which can clear a row or column of candies.</li>
+         <li>Boosters are special items that can aid you in difficult levels.</li>
+         <li>Earn boosters by successfully completing levels or through in-app purchases.</li>
+         <li>Boosters can offer advantages such as extra attempts, additional clues, or even the ability to skip challenging puzzles.</li>
       </ul>
-      <p>Good luck and have fun playing Candy Crush!</p>
+      <p>Good luck and enjoy playing Color Puzzle Game!</p>
    </body>
 </html>
