@@ -584,7 +584,7 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.22
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 0}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
@@ -772,7 +772,7 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.34
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 0}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
@@ -1093,7 +1093,7 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.22
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 0}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
@@ -1189,7 +1189,7 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.22
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 0}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
@@ -1315,7 +1315,7 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.22
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 0}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
@@ -1478,6 +1478,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   light2D: {fileID: 1857183694}
   score: {fileID: 970532482}
+  remainingTime: {fileID: 1693467137}
   speak: {fileID: 680121792}
   faillPopup: {fileID: 850377603}
   statusLight:
@@ -1488,7 +1489,7 @@ MonoBehaviour:
   - {fileID: 1379424429}
   - {fileID: 535415856}
   - {fileID: 1207542518}
-  confidence: 2
+  confidence: 1
 --- !u!4 &1598936947
 Transform:
   m_ObjectHideFlags: 0
@@ -1985,7 +1986,7 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.22
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 0}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
@@ -2185,7 +2186,7 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.22
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 0}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
