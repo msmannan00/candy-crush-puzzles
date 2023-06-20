@@ -8,6 +8,8 @@ public class loginController : MonoBehaviour
 {
     [Header("Utilities")]
     public GameObject UIBlocker;
+    public GameObject RegisterUI;
+    public GameObject LoginUI;
 
 
     [Header("Login Screen")]
@@ -29,6 +31,11 @@ public class loginController : MonoBehaviour
         playfabManager.Instance.OnTryLogin(email, password, callbackLoginSuccess, callbackLoginFailure);
     }
 
+    public void OnDummyLogin()
+    {
+        SceneManager.LoadScene("gameplay");
+    }
+
     public void OnTryRegisterNewAccount()
     {
         string email = RegisterEmailField.text;
@@ -40,7 +47,7 @@ public class loginController : MonoBehaviour
 
     public void callbackLoginSuccess(string email, string playfabID )
     {
-        SceneManager.LoadScene("Dashboard");
+        SceneManager.LoadScene("gameplay");
         userSessionManager.Instance.initialize(email, playfabID);
         UIBlocker.SetActive(false);
     }
@@ -65,7 +72,7 @@ public class loginController : MonoBehaviour
 
     public void callbackRegisterationSuccess()
     {
-        SceneManager.LoadScene("Dashboard");
+        SceneManager.LoadScene("gameplay");
         UIBlocker.SetActive(false);
     }
 
@@ -78,7 +85,7 @@ public class loginController : MonoBehaviour
     public void callbackGmailSuccess()
     {
         userSessionManager.Instance.initialize("gmail_session", "none");
-        SceneManager.LoadScene("Dashboard");
+        SceneManager.LoadScene("gameplay");
         UIBlocker.SetActive(false);
     }
 
@@ -102,7 +109,7 @@ public class loginController : MonoBehaviour
 
     public void callbackFacebookSuccess()
     {
-        SceneManager.LoadScene("Dashboard");
+        SceneManager.LoadScene("gameplay");
         userSessionManager.Instance.initialize("facebook_session", "none");
         UIBlocker.SetActive(false);
     }
@@ -113,6 +120,11 @@ public class loginController : MonoBehaviour
         UIBlocker.SetActive(false);
     }
 
+    public void onRegisterUI()
+    {
+        RegisterUI.SetActive(true);
+        LoginUI.SetActive(false);
+    }
 
     void Start()
     {
