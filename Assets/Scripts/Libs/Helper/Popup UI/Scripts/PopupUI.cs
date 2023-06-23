@@ -8,6 +8,7 @@ using System.Collections ;
 using UnityEngine.UI ;
 using EasyUI.Popup ;
 using UnityEngine.Events ;
+using TMPro;
 
 
 namespace EasyUI.Helpers {
@@ -17,8 +18,8 @@ namespace EasyUI.Helpers {
       [SerializeField] private GraphicRaycaster uiCanvasGraphicRaycaster ;
       [SerializeField] private CanvasGroup uiCanvasGroup ;
       [SerializeField] private GameObject uiHeader ;
-      [SerializeField] private Text uiTitle ;
-      [SerializeField] private Text uiText ;
+      [SerializeField] private TextMeshProUGUI uiTitle;
+      [SerializeField] private TextMeshProUGUI uiText;
       [SerializeField] private Image uiButtonImage ;
       [SerializeField] private Text uiButtonText ;
       private Button uiButton ;
@@ -70,7 +71,7 @@ namespace EasyUI.Helpers {
          Color ct = c ;
          ct.a = .75f ;
          uiTitle.color = ct ;
-         uiButtonImage.color = c ;
+         //uiButtonImage.color = c ;
 
          onCloseAction = action ;
 

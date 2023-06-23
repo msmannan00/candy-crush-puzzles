@@ -57,7 +57,7 @@
     <file>Assets/Plugins/Android/androidx.versionedparcelable.versionedparcelable-1.1.0.aar</file>
     <file>Assets/Plugins/Android/androidx.viewpager.viewpager-1.0.0.aar</file>
     <file>Assets/Plugins/Android/com.android.installreferrer.installreferrer-1.0.aar</file>
-    <file>Assets/Plugins/Android/com.facebook.android.audience-network-sdk-6.4.0.aar</file>
+    <file>Assets/Plugins/Android/com.facebook.android.audience-network-sdk-6.14.0.aar</file>
     <file>Assets/Plugins/Android/com.facebook.android.facebook-applinks-16.0.1.aar</file>
     <file>Assets/Plugins/Android/com.facebook.android.facebook-bolts-16.0.1.aar</file>
     <file>Assets/Plugins/Android/com.facebook.android.facebook-common-16.0.1.aar</file>
@@ -65,8 +65,17 @@
     <file>Assets/Plugins/Android/com.facebook.android.facebook-gamingservices-16.0.1.aar</file>
     <file>Assets/Plugins/Android/com.facebook.android.facebook-login-16.0.1.aar</file>
     <file>Assets/Plugins/Android/com.facebook.android.facebook-share-16.0.1.aar</file>
-    <file>Assets/Plugins/Android/com.google.android.gms.play-services-basement-11.0.4.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-auth-19.2.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-auth-api-phone-17.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-auth-base-17.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-base-18.0.1.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-basement-18.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-drive-17.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-games-21.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-nearby-18.7.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-tasks-18.0.1.aar</file>
     <file>Assets/Plugins/Android/com.google.code.gson.gson-2.8.8.jar</file>
+    <file>Assets/Plugins/Android/com.google.games.gpgs-plugin-support-0.10.14.aar</file>
     <file>Assets/Plugins/Android/com.google.zxing.core-3.3.3.jar</file>
     <file>Assets/Plugins/Android/com.parse.bolts.bolts-android-1.4.0.jar</file>
     <file>Assets/Plugins/Android/com.parse.bolts.bolts-applinks-1.4.0.jar</file>
@@ -78,8 +87,8 @@
     <file>Assets/Plugins/Android/org.jetbrains.kotlin.kotlin-stdlib-jdk8-1.5.10.jar</file>
   </files>
   <settings>
-    <setting name="androidAbis" value="armeabi-v7a" />
-    <setting name="bundleId" value="com.darkweb.searchengine.hello" />
+    <setting name="androidAbis" value="arm64-v8a,armeabi-v7a,x86" />
+    <setting name="bundleId" value="com.pingak9.Speech" />
     <setting name="explodeAars" value="True" />
     <setting name="gradleBuildEnabled" value="True" />
     <setting name="gradlePropertiesTemplateEnabled" value="False" />

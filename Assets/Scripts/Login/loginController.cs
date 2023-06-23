@@ -10,6 +10,7 @@ public class loginController : MonoBehaviour
     public GameObject UIBlocker;
     public GameObject RegisterUI;
     public GameObject LoginUI;
+    public GameObject ForgotUI;
 
 
     [Header("Login Screen")]
@@ -17,13 +18,18 @@ public class loginController : MonoBehaviour
     public TMP_InputField LoginPasswordField;
 
     [Header("Register Screen")]
+    public TMP_InputField RegisterEmailFieldFirstName;
+    public TMP_InputField RegisterEmailFieldLastName;
     public TMP_InputField RegisterEmailField;
     public TMP_InputField RegisterPasswordwordField;
-    
+    public TMP_InputField ForgotEmailField;
+
 
 
     public void OnTryLogin()
     {
+        //SceneManager.LoadScene("gameplay");
+
         string email = LoginEmailField.text;
         string password = LoginPasswordField.text;
 
@@ -40,9 +46,29 @@ public class loginController : MonoBehaviour
     {
         string email = RegisterEmailField.text;
         string password = RegisterPasswordwordField.text;
+        string fname = RegisterEmailFieldFirstName.text;
+        string lname = RegisterEmailFieldLastName.text;
 
         UIBlocker.SetActive(true);
-        playfabManager.Instance.OnTryRegisterNewAccount(email, password, callbackRegisterationSuccess, callbackRegisterationFailure);
+        playfabManager.Instance.OnTryRegisterNewAccount(email, password, fname, lname, callbackRegisterationSuccess, callbackRegisterationFailure);
+    }
+
+    public void showForgotUI()
+    {
+        ForgotUI.SetActive(true);
+    }
+
+    public void closeRegister()
+    {
+        LoginUI.SetActive(true);
+        RegisterUI.SetActive(false);
+    }
+
+    public void onForgotPassword()
+    {
+        UIBlocker.SetActive(true);
+        string email = ForgotEmailField.text;
+        playfabManager.Instance.InitiatePasswordRecovery(email, callbackForgotSuccess, callbackForgotFailure);
     }
 
     public void callbackLoginSuccess(string email, string playfabID )
@@ -50,6 +76,12 @@ public class loginController : MonoBehaviour
         SceneManager.LoadScene("gameplay");
         userSessionManager.Instance.initialize(email, playfabID);
         UIBlocker.SetActive(false);
+    }
+
+    public void closeResetPassword()
+    {
+        ForgotUI.SetActive(false);
+        LoginUI.SetActive(true);
     }
 
     public void OnSignGmail()
@@ -66,7 +98,7 @@ public class loginController : MonoBehaviour
 
     public void callbackLoginFailure(PlayFabError error)
     {
-        Popup.Show("Oops!", error.ErrorMessage, "Dismiss", PopupColor.Red);
+        Popup.Show("Oops!", error.ErrorMessage, "Dismiss");
         UIBlocker.SetActive(false);
     }
 
@@ -78,7 +110,7 @@ public class loginController : MonoBehaviour
 
     public void callbackRegisterationFailure(PlayFabError error)
     {
-        Popup.Show("Oops!", error.ErrorMessage, "Dismiss", PopupColor.Red);
+        Popup.Show("Oops!", error.ErrorMessage, "Dismiss");
         UIBlocker.SetActive(false);
     }
 
@@ -94,11 +126,33 @@ public class loginController : MonoBehaviour
         UIBlocker.SetActive(false);
         if (error == null)
         {
-            Popup.Show("Oops!", "Initialization Failed", "Dismiss", PopupColor.Red);
+            Popup.Show("Oops!", "Initialization Failed", "Dismiss");
         }
         else
         {
-            Popup.Show("Oops!", error.ErrorMessage, "Dismiss", PopupColor.Red);
+            Popup.Show("Oops!", error.ErrorMessage, "Dismiss");
+        }
+    }
+
+    public void callbackForgotSuccess()
+    {
+        LoginUI.SetActive(true);
+        ForgotUI.SetActive(false);
+        Popup.Show("Email Sent", "please check your email for further instruction", "Dismiss");
+        UIBlocker.SetActive(false);
+    }
+
+    public void callbackForgotFailure(PlayFabError error)
+    {
+        UIBlocker.SetActive(false);
+        ForgotEmailField.text = "";
+        if (error == null)
+        {
+            Popup.Show("Oops!", "Initialization Failed", "Dismiss");
+        }
+        else
+        {
+            Popup.Show("Oops!", error.ErrorMessage, "Dismiss");
         }
     }
 
@@ -116,7 +170,7 @@ public class loginController : MonoBehaviour
 
     public void callbackFacebookFailure(PlayFabError error)
     {
-        Popup.Show("Oops!", error.ErrorMessage, "Dismiss", PopupColor.Red);
+        Popup.Show("Oops!", error.ErrorMessage, "Dismiss");
         UIBlocker.SetActive(false);
     }
 

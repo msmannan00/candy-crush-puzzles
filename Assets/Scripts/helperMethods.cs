@@ -54,12 +54,20 @@ public class helperMethods
         {
             if (currentPermutation.Count == length)
             {
-                permutations.Add(new List<string>(currentPermutation));
+                if (!AreAllColorsSame(currentPermutation)) // Check if all colors in the current permutation are not the same
+                {
+                    permutations.Add(new List<string>(currentPermutation));
+                }
                 return;
             }
 
             foreach (string color in colors)
             {
+                if (currentPermutation.Count > 0 && currentPermutation[currentPermutation.Count - 1] == color)
+                {
+                    continue; // Skip the current color if it is the same as the previous one
+                }
+
                 currentPermutation.Add(color);
                 GeneratePermutationsRecursive(currentPermutation);
                 currentPermutation.RemoveAt(currentPermutation.Count - 1);
@@ -68,8 +76,6 @@ public class helperMethods
 
         GeneratePermutationsRecursive(new List<string>());
         ShuffleList(permutations);
-
-        helperMethods.GetInstance().ShuffleList(permutations);
 
         if (permutations.Count > count)
         {
@@ -81,6 +87,18 @@ public class helperMethods
         }
     }
 
+    private bool AreAllColorsSame(List<string> colors)
+    {
+        string firstColor = colors[0];
+        for (int i = 1; i < colors.Count; i++)
+        {
+            if (colors[i] != firstColor)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public static helperMethods GetInstance()
     {

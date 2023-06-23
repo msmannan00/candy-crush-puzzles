@@ -15,13 +15,10 @@ MonoBehaviour:
   selectedAppIndex: 0
   clientTokens:
   - 1c9f8c1f3723ef2f028f55995195706f
-  - 
   appIds:
   - 553187446798661
-  - 0
   appLabels:
   - candy crush reborncandy crush reborn
-  - New App
   cookie: 1
   logging: 1
   status: 1
@@ -30,7 +27,6 @@ MonoBehaviour:
   androidKeystorePath: C:/Users/msman/Downloads/user.keystore
   iosURLSuffix: 
   appLinkSchemes:
-  - list: []
   - list: []
   uploadAccessToken: 
   autoLogAppEventsEnabled: 1

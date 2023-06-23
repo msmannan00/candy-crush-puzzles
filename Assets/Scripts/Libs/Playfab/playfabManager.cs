@@ -2,16 +2,10 @@ using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine;
 using System;
-using GooglePlayGames;
-using Facebook.Unity;
-using LoginResult = PlayFab.ClientModels.LoginResult;
+using System.Collections.Generic;
 
 public class playfabManager : GenericSingletonClass<playfabManager>
 {
-
-    private facebookManager _facebookManager = new facebookManager();
-    private googleManager _googleManager = new googleManager();
-
     public void OnTryLogin(string email, string password, Action<string, string> callbackSuccess, Action<PlayFabError> callbackFailure)
     {
         LoginWithEmailAddressRequest req = new LoginWithEmailAddressRequest
@@ -33,19 +27,24 @@ public class playfabManager : GenericSingletonClass<playfabManager>
 
     public void OnLogout(string username, string playfabID, Action callbackSuccess, Action<PlayFabError> callbackFailure)
     {
-        _facebookManager.OnLogout();
-        callbackSuccess();
+        // Implement logout functionality if required
     }
 
     public void OnSignGmail(Action callbackSuccess, Action<PlayFabError> callbackFailure)
     {
-        _googleManager.OnSignGmail(callbackSuccess, callbackFailure);
+        // Implement sign in with Gmail functionality if required
     }
 
-    public void OnTryRegisterNewAccount(string email, string password, Action callbackSuccess, Action<PlayFabError> callbackFailure)
+    public void OnTryRegisterNewAccount(string email, string password, string fname, string lname, Action callbackSuccess, Action<PlayFabError> callbackFailure)
     {
+        if(fname == null || fname.Equals(""))
+        {
+            fname = "abc";
+        }
         RegisterPlayFabUserRequest req = new RegisterPlayFabUserRequest
         {
+            Username = fname,
+            DisplayName = fname,
             Email = email,
             Password = password,
             RequireBothUsernameAndEmail = false
@@ -60,12 +59,92 @@ public class playfabManager : GenericSingletonClass<playfabManager>
         {
             callbackFailure(err);
         });
+    }
 
+    public void InitiatePasswordRecovery(string email, Action callbackSuccess, Action<PlayFabError> callbackFailure)
+    {
+        RegisterPlayFabUserRequest req = new RegisterPlayFabUserRequest
+        {
+            Email = email, // or Username = emailOrUsername
+            TitleId = "9AA0E"
+        };
+
+        PlayFabClientAPI.RegisterPlayFabUser(req,
+        res =>
+        {
+            callbackSuccess();
+        },
+        err =>
+        {
+            callbackFailure(err);
+        });
+    }
+
+    public void onSubmitScore(int score)
+    {
+        var request = new UpdatePlayerStatisticsRequest
+        {
+            Statistics = new List<StatisticUpdate>
+            {
+                new StatisticUpdate
+                {
+                    StatisticName = "headlight-leaderboard", // Replace with your actual leaderboard name
+                    Value = score
+                }
+            }
+        };
+
+        PlayFabClientAPI.UpdatePlayerStatistics(request,
+        res =>
+        {
+            Debug.Log("success");
+        },
+        err =>
+        {
+            Debug.Log("fail");
+        });
+
+    }
+
+    public void FetchLeaderboard(Action<GetLeaderboardResult> callbackSuccess, Action<PlayFabError> callbackFailure)
+    {
+        var request = new GetLeaderboardRequest
+        {
+            StatisticName = "headlight-leaderboard",
+            StartPosition = 0,
+            MaxResultsCount = 41 // Fetch 6 entries to include yourself
+        };
+
+        PlayFabClientAPI.GetLeaderboard(request,
+        res =>
+        {
+            callbackSuccess(res);
+        },
+        err =>
+        {
+            callbackFailure(err);
+        });
+
+    }
+
+    private void OnLeaderboardData(GetLeaderboardResult result)
+    {
+        // Process the leaderboard data and update your UI
+        foreach (var entry in result.Leaderboard)
+        {
+            Debug.Log("Player: " + entry.PlayFabId + ", Score: " + entry.StatValue);
+        }
+    }
+
+    private void OnError(PlayFabError error)
+    {
+        // Handle error response from PlayFab API
+        Debug.LogError("PlayFab Error: " + error.GenerateErrorReport());
     }
 
     public void OnSignInFacebook(Action callbackInitialized, Action callbackSuccess, Action<PlayFabError> callbackFailure)
     {
-        _facebookManager.OnSignInFacebook(callbackInitialized, callbackSuccess, callbackFailure);
+        // Implement sign in with Facebook functionality if required
     }
 
     void Start()
@@ -74,7 +153,6 @@ public class playfabManager : GenericSingletonClass<playfabManager>
 
     void Update()
     {
-        
-    }
 
+    }
 }
