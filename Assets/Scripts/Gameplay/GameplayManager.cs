@@ -354,14 +354,10 @@ public class gamePlayManager : MonoBehaviour
             correctOption[e].SetActive(false);
         }
 
-        currentCombinationIndex = 0;
-        currentCombinationIndexLevel = 1;
         failPopupObject.SetActive(false);
         completePopupObject.SetActive(false);
         successPopupObject.SetActive(false);
         sessionStarted = false;
-        levelText.text = "Level 1:";
-        stageText.text = "Stage 1";
         StopCoroutine(countDownCoroutine);
         onPlay();
     }
@@ -652,7 +648,6 @@ public class gamePlayManager : MonoBehaviour
 
         string[] words = Regex.Split(text.ToLower(), @"\W+");
         Debug.Log("11xxxx");
-        stageText.text = "text";
 
         if (sessionStarted)
         {
