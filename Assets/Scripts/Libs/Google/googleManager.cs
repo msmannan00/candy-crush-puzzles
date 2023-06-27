@@ -4,8 +4,8 @@ using GooglePlayGames;
 using Facebook.Unity;
 using PlayFab.ClientModels;
 using UnityEngine;
-using GooglePlayGames;
-using GooglePlayGames.BasicApi;
+//using GooglePlayGames;
+//using GooglePlayGames.BasicApi;
 
 public class googleManager
 {
@@ -24,7 +24,7 @@ public class googleManager
 
     public void OnSignGmail(Action callbackSuccess, Action<PlayFabError> callbackFailure)
     {
-        Social.localUser.Authenticate((bool success) => {
+        /*Social.localUser.Authenticate((bool success) => {
             if (success)
             {
                 var serverAuthCode = PlayGamesPlatform.Instance.GetServerAuthCode();
@@ -47,6 +47,6 @@ public class googleManager
             {
                 callbackFailure(null);
             }
-        });
+        });*/
     }
 }
