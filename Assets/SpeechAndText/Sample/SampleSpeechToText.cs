@@ -55,28 +55,13 @@ public class SampleSpeechToText : MonoBehaviour
     }
     void OnResultSpeech(string _data)
     {
-        Debug.Log("sdaadsdsasad");
-        Debug.Log("sdaadsdsasad");
-        Debug.Log("sdaadsdsasad");
-        Debug.Log("sdaadsdsasad");
-        Debug.Log("sdaadsdsasad");
-        Debug.Log("sdaadsdsasad");
-        Debug.Log("sdaadsdsasad");
-
-        inputText.text = _data + " : xxxx";
+        inputText.text = _data;
 #if UNITY_IOS
         loading.SetActive(false);
 #endif
     }
     public void OnClickSpeak()
     {
-        Debug.Log("1sdaadsdsasad");
-        Debug.Log("2sdaadsdsasad");
-        Debug.Log("3sdaadsdsasad");
-        Debug.Log("4sdaadsdsasad");
-        Debug.Log("5sdaadsdsasad");
-        Debug.Log("6sdaadsdsasad");
-        Debug.Log("7sdaadsdsasad");
         TextToSpeech.Instance.StartSpeak(inputText.text);
     }
 
