@@ -32,7 +32,22 @@ public class playfabManager : GenericSingletonClass<playfabManager>
 
     public void OnSignGmail(Action callbackSuccess, Action<PlayFabError> callbackFailure)
     {
-        // Implement sign in with Gmail functionality if required
+        var request = new LoginWithGoogleAccountRequest
+        {
+            CreateAccount = true // Set to true if you want to create a new PlayFab account for the user
+        };
+
+        PlayFabClientAPI.LoginWithGoogleAccount(request, result =>
+        {
+            // Successful login
+            Debug.Log("Logged in with Gmail: " + result.PlayFabId);
+            callbackSuccess?.Invoke(); // Invoke the success callback if provided
+        }, error =>
+        {
+            // Failed login
+            Debug.LogError("Gmail login failed: " + error.GenerateErrorReport());
+            callbackFailure?.Invoke(error); // Invoke the failure callback if provided
+        });
     }
 
     public void OnTryRegisterNewAccount(string email, string password, string fname, string lname, Action callbackSuccess, Action<PlayFabError> callbackFailure)
