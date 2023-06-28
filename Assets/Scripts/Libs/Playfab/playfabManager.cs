@@ -3,9 +3,22 @@ using PlayFab.ClientModels;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
 
 public class playfabManager : GenericSingletonClass<playfabManager>
 {
+    public playfabManager()
+    {
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
+        .AddOauthScope("profile")
+        .RequestServerAuthCode(false)
+        .Build();
+
+        PlayGamesPlatform.InitializeInstance(config);
+        PlayGamesPlatform.DebugLogEnabled = true;
+        PlayGamesPlatform.Activate();
+    }
     public void OnTryLogin(string email, string password, Action<string, string> callbackSuccess, Action<PlayFabError> callbackFailure)
     {
         LoginWithEmailAddressRequest req = new LoginWithEmailAddressRequest
@@ -32,21 +45,38 @@ public class playfabManager : GenericSingletonClass<playfabManager>
 
     public void OnSignGmail(Action callbackSuccess, Action<PlayFabError> callbackFailure)
     {
-        var request = new LoginWithGoogleAccountRequest
-        {
-            CreateAccount = true // Set to true if you want to create a new PlayFab account for the user
-        };
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
+        .AddOauthScope("profile")
+        .RequestServerAuthCode(false)
+        .Build();
 
-        PlayFabClientAPI.LoginWithGoogleAccount(request, result =>
-        {
-            // Successful login
-            Debug.Log("Logged in with Gmail: " + result.PlayFabId);
-            callbackSuccess?.Invoke(); // Invoke the success callback if provided
-        }, error =>
-        {
-            // Failed login
-            Debug.LogError("Gmail login failed: " + error.GenerateErrorReport());
-            callbackFailure?.Invoke(error); // Invoke the failure callback if provided
+        PlayGamesPlatform.InitializeInstance(config);
+        PlayGamesPlatform.DebugLogEnabled = true;
+        PlayGamesPlatform.Activate();
+
+        Social.localUser.Authenticate((bool success) => {
+            if (success)
+            {
+                var serverAuthCode = PlayGamesPlatform.Instance.GetServerAuthCode();
+                PlayFabClientAPI.LoginWithGoogleAccount(new LoginWithGoogleAccountRequest()
+                {
+                    TitleId = "9AA0E",
+                    ServerAuthCode = "",
+                    CreateAccount = true
+                },
+                res =>
+                {
+                    callbackSuccess();
+                },
+                err =>
+                {
+                    callbackFailure(err);
+                });
+            }
+            else
+            {
+                callbackFailure(null);
+            }
         });
     }
 

@@ -1,6 +1,5 @@
-{
+﻿{
     "name": "PlayFabEditorExtensions",
-    "rootNamespace": "",
     "references": [],
     "includePlatforms": [
         "Editor"
@@ -11,6 +10,5 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+    "versionDefines": []
 }

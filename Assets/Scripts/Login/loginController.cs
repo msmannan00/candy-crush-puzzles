@@ -32,7 +32,7 @@ public class loginController : MonoBehaviour
 
         string email = LoginEmailField.text;
         string password = LoginPasswordField.text;
-
+        PlayFabSettings.TitleId = "9AA0E";
         UIBlocker.SetActive(true);
         playfabManager.Instance.OnTryLogin(email, password, callbackLoginSuccess, callbackLoginFailure);
     }

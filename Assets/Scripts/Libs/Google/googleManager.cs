@@ -1,7 +1,6 @@
 using PlayFab;
 using System;
 using GooglePlayGames;
-using Facebook.Unity;
 using PlayFab.ClientModels;
 using UnityEngine;
 using GooglePlayGames;
@@ -30,7 +29,7 @@ public class googleManager
                 var serverAuthCode = PlayGamesPlatform.Instance.GetServerAuthCode();
                 PlayFabClientAPI.LoginWithGoogleAccount(new LoginWithGoogleAccountRequest()
                 {
-                    TitleId = PlayFabSettings.TitleId,
+                    TitleId = "9AA0E",
                     ServerAuthCode = serverAuthCode, 
                     CreateAccount = true
                 },
