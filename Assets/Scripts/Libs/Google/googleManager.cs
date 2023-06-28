@@ -1,7 +1,6 @@
 using PlayFab;
 using System;
 using GooglePlayGames;
-using Facebook.Unity;
 using PlayFab.ClientModels;
 using UnityEngine;
 //using GooglePlayGames;
