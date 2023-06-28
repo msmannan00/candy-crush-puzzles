@@ -61,7 +61,7 @@ public class playfabManager : GenericSingletonClass<playfabManager>
                 PlayFabClientAPI.LoginWithGoogleAccount(new LoginWithGoogleAccountRequest()
                 {
                     TitleId = "9AA0E",
-                    ServerAuthCode = "",
+                    ServerAuthCode = serverAuthCode,
                     CreateAccount = true
                 },
                 res =>
