@@ -11,14 +11,14 @@ public class googleManager
 
     public googleManager()
     {
-        /*PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
         .AddOauthScope("profile")
         .RequestServerAuthCode(false)
         .Build();
 
         PlayGamesPlatform.InitializeInstance(config);
         PlayGamesPlatform.DebugLogEnabled = true;
-        PlayGamesPlatform.Activate();*/
+        PlayGamesPlatform.Activate();
     }
 
     public void OnSignGmail(Action callbackSuccess, Action<PlayFabError> callbackFailure)

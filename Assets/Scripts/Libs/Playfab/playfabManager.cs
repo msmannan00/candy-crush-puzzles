@@ -8,7 +8,8 @@ using GooglePlayGames.BasicApi;
 
 public class playfabManager : GenericSingletonClass<playfabManager>
 {
-    public playfabManager()
+
+    public void OnServerInitialized()
     {
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
         .AddOauthScope("profile")
@@ -16,9 +17,10 @@ public class playfabManager : GenericSingletonClass<playfabManager>
         .Build();
 
         PlayGamesPlatform.InitializeInstance(config);
-        PlayGamesPlatform.DebugLogEnabled = true;
+        PlayGamesPlatform.DebugLogEnabled = false;
         PlayGamesPlatform.Activate();
     }
+
     public void OnTryLogin(string email, string password, Action<string, string> callbackSuccess, Action<PlayFabError> callbackFailure)
     {
         LoginWithEmailAddressRequest req = new LoginWithEmailAddressRequest
@@ -45,14 +47,6 @@ public class playfabManager : GenericSingletonClass<playfabManager>
 
     public void OnSignGmail(Action callbackSuccess, Action<PlayFabError> callbackFailure)
     {
-        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
-        .AddOauthScope("profile")
-        .RequestServerAuthCode(false)
-        .Build();
-
-        PlayGamesPlatform.InitializeInstance(config);
-        PlayGamesPlatform.DebugLogEnabled = true;
-        PlayGamesPlatform.Activate();
 
         Social.localUser.Authenticate((bool success) => {
             if (success)

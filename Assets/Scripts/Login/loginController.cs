@@ -182,7 +182,7 @@ public class loginController : MonoBehaviour
 
     void Start()
     {
-
+        playfabManager.Instance.OnServerInitialized();
     }
 
     void Update()
