@@ -37,6 +37,11 @@ public class loginController : MonoBehaviour
         playfabManager.Instance.OnTryLogin(email, password, callbackLoginSuccess, callbackLoginFailure);
     }
 
+    public void OnPrivacyPolicy()
+    {
+        Application.OpenURL("https://366degreefitresearch.com/headlights-privacy-policy");
+    }
+
     public void OnDummyLogin()
     {
         SceneManager.LoadScene("gameplay");

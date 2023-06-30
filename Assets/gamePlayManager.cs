@@ -600,7 +600,7 @@ public class gamePlayManager : MonoBehaviour
                 }
             }
         }
-
+        pausebutton.SetActive(false);
         yield return new WaitForSeconds(0.5f);
         backgroundShadow.SetActive(false);
         yield return FadeColor(light2D.color, Color.black, 0.2f);
