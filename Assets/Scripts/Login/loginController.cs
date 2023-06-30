@@ -71,7 +71,7 @@ public class loginController : MonoBehaviour
         playfabManager.Instance.InitiatePasswordRecovery(email, callbackForgotSuccess, callbackForgotFailure);
     }
 
-    public void callbackLoginSuccess(string email, string playfabID )
+    public void callbackLoginSuccess(string email, string playfabID)
     {
         SceneManager.LoadScene("gameplay");
         userSessionManager.Instance.initialize(email, playfabID);
@@ -87,7 +87,7 @@ public class loginController : MonoBehaviour
     public void OnSignGmail()
     {
         UIBlocker.SetActive(true);
-        playfabManager.Instance.OnSignGmail(callbackGmailSuccess, callbackGmailFailure);
+        playfabManager.Instance.OnSignGmail(callbackGmailSuccess, callbackGmailFailure, callbackLoginSuccess, callbackLoginFailure);
     }
 
     public void OnSignFacebook()

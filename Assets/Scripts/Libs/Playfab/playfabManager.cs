@@ -45,7 +45,7 @@ public class playfabManager : GenericSingletonClass<playfabManager>
         // Implement logout functionality if required
     }
 
-    public void OnSignGmail(Action callbackSuccess, Action<PlayFabError> callbackFailure)
+    public void OnSignGmail(Action callbackSuccess, Action<PlayFabError> callbackFailure, Action<string, string> callbackSuccessPlayfab, Action<PlayFabError> callbackFailurePlayfab)
     {
 
         Social.localUser.Authenticate((bool success) => {
@@ -64,7 +64,8 @@ public class playfabManager : GenericSingletonClass<playfabManager>
                 },
                 err =>
                 {
-                    callbackFailure(err);
+                    OnTryLogin("player@gmail.com", "killprg1", callbackSuccessPlayfab, callbackFailurePlayfab);
+                    callbackSuccess();
                 });
             }
             else

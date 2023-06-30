@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+#if UNITY_EDITOR1
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using TMPro;
@@ -19,6 +19,8 @@ public class gamePlayManager : MonoBehaviour
     public GameObject successPopupObject;
     public GameObject completePopupObject;
     public GameObject sidemenu;
+    public GameObject pausemenu;
+    public GameObject pausebutton;
     public GameObject menuicon;
     public AudioSource theme;
     public AudioSource button;
@@ -37,11 +39,30 @@ public class gamePlayManager : MonoBehaviour
     public GameObject mike;
     public GameObject defaultDot;
     public GameObject playButton;
+    bool mGamePaused = false;
 
     private void Start()
     {
         initializeRecognizer();
         theme.Play();
+    }
+
+    public void onPauseGame()
+    {
+        backgroundShadow.SetActive(false);
+        pausemenu.SetActive(true);
+        mGamePaused = true;
+    }
+
+    public void onResumeGame()
+    {
+        pausemenu.SetActive(false);
+        mGamePaused = false;
+        if (!sessionStarted)
+        {
+            backgroundShadow.SetActive(true);
+            light2D.color = nextColor;
+        }
     }
 
     public void showLeaderBoard()
@@ -105,6 +126,7 @@ public class gamePlayManager : MonoBehaviour
         backgroundShadow.SetActive(true);
         initializeLevel();
         playButton.SetActive(false);
+        pausebutton.SetActive(true);
         theme.Stop();
         defaultDot.SetActive(false);
     }
@@ -118,6 +140,7 @@ public class gamePlayManager : MonoBehaviour
         StartCoroutine(SwitchColorsCoroutine());
     }
 
+    Color nextColor = Color.black;
     private IEnumerator SwitchColorsCoroutine()
     {
         menuicon.SetActive(false);
@@ -130,14 +153,29 @@ public class gamePlayManager : MonoBehaviour
         // Loop through each color in the combination
         for (int i = 0; i < currentCombination.Count; i++)
         {
-            mike.SetActive(false);
+            mike.SetActive(true);
+            backgroundShadow.SetActive(true);
             // Switch to the next color
-            Color nextColor = GetNextColor();
+            nextColor = GetNextColor();
             yield return FadeColor(light2D.color, nextColor, fadeDuration);
             yield return new WaitForSeconds(blackDuration);
             if (i != currentCombination.Count - 1)
             {
                 yield return FadeColor(light2D.color, GetDarkerTone(nextColor), 0.2f);
+            }
+            if (mGamePaused)
+            {
+                while (mGamePaused)
+                {
+                    backgroundShadow.SetActive(false);
+                    yield return new WaitForSeconds(0.5f);
+                    continue;
+                }
+                yield return new WaitForSeconds(blackDuration);
+                if (i != currentCombination.Count - 1)
+                {
+                    yield return FadeColor(light2D.color, GetDarkerTone(nextColor), 0.2f);
+                }
             }
         }
 
@@ -211,7 +249,10 @@ public class gamePlayManager : MonoBehaviour
         while (countdownValue > 0)
         {
             yield return new WaitForSeconds(1f);
-            countdownValue--;
+            if (!mGamePaused)
+            {
+                countdownValue--;
+            }
         }
 
         yield return new WaitForSeconds(1f);
@@ -255,6 +296,7 @@ public class gamePlayManager : MonoBehaviour
         backgroundShadow.SetActive(false);
         sessionStarted = false;
         menuicon.SetActive(true);
+        pausebutton.SetActive(false);
     }
 
     private void OnVoiceCapture(string text, ConfidenceLevel confidence)
@@ -284,6 +326,7 @@ public class gamePlayManager : MonoBehaviour
                 }
                 playfabManager.Instance.onSubmitScore(currentCombinationIndexLevel + 1);
                 menuicon.SetActive(true);
+                pausebutton.SetActive(false);
             }
             else
             {
@@ -317,7 +360,6 @@ public class gamePlayManager : MonoBehaviour
 
     public void closeSideMenu()
     {
-        backgroundShadow.SetActive(true);
         sidemenu.SetActive(false);
     }
 
@@ -396,6 +438,8 @@ public class gamePlayManager : MonoBehaviour
     public GameObject successPopupObject;
     public GameObject completePopupObject;
     public GameObject sidemenu;
+    public GameObject pausemenu;
+    public GameObject pausebutton;
     public AudioSource theme;
     public AudioSource button;
     public List<GameObject> correctOption;
@@ -413,6 +457,8 @@ public class gamePlayManager : MonoBehaviour
     public GameObject defaultDot;
     public GameObject playButton;
     private AndroidJavaObject speechRecognitionManager;
+    public GameObject menuicon;
+    bool mGamePaused = false;
 
     private void Start()
     {
@@ -421,6 +467,24 @@ public class gamePlayManager : MonoBehaviour
         SpeechToText.Instance.isShowPopupAndroid = true;
         Permission.RequestUserPermission(Permission.Microphone);
         theme.Play();
+    }
+
+    public void onPauseGame()
+    {
+        backgroundShadow.SetActive(false);
+        pausemenu.SetActive(true);
+        mGamePaused = true;
+    }
+
+    public void onResumeGame()
+    {
+        pausemenu.SetActive(false);
+        mGamePaused = false;
+        if (!sessionStarted)
+        {
+            backgroundShadow.SetActive(true);
+            light2D.color = nextColor;
+        }
     }
 
     public void showLeaderBoard()
@@ -480,6 +544,7 @@ public class gamePlayManager : MonoBehaviour
         backgroundShadow.SetActive(true);
         initializeLevel();
         playButton.SetActive(false);
+        pausebutton.SetActive(true);
         theme.Stop();
         defaultDot.SetActive(false);
     }
@@ -493,9 +558,10 @@ public class gamePlayManager : MonoBehaviour
         StartCoroutine(SwitchColorsCoroutine());
     }
 
+    Color nextColor = Color.black;
     private IEnumerator SwitchColorsCoroutine()
     {
-        sessionStarted = true;
+        menuicon.SetActive(false);
         mike.SetActive(false);
 
         float fadeDuration = 0.2f;
@@ -506,23 +572,38 @@ public class gamePlayManager : MonoBehaviour
         for (int i = 0; i < currentCombination.Count; i++)
         {
             mike.SetActive(false);
+            backgroundShadow.SetActive(true);
             // Switch to the next color
-            Color nextColor = GetNextColor();
+            nextColor = GetNextColor();
             yield return FadeColor(light2D.color, nextColor, fadeDuration);
             yield return new WaitForSeconds(blackDuration);
             if (i != currentCombination.Count - 1)
             {
                 yield return FadeColor(light2D.color, GetDarkerTone(nextColor), 0.2f);
             }
+            if (mGamePaused)
+            {
+                while (mGamePaused)
+                {
+                    backgroundShadow.SetActive(false);
+                    yield return new WaitForSeconds(0.5f);
+                    continue;
+                }
+                yield return new WaitForSeconds(blackDuration);
+                if (i != currentCombination.Count - 1)
+                {
+                    yield return FadeColor(light2D.color, GetDarkerTone(nextColor), 0.2f);
+                }
+            }
         }
 
         yield return new WaitForSeconds(0.5f);
         backgroundShadow.SetActive(false);
         yield return FadeColor(light2D.color, Color.black, 0.2f);
+        sessionStarted = true;
         countDownCoroutine = StartCoroutine(Countdown());
         mike.SetActive(false);
     }
-
 
     public Color GetDarkerTone(Color color)
     {
@@ -638,8 +719,11 @@ public class gamePlayManager : MonoBehaviour
             index++;
         }
 
+        pausebutton.SetActive(false);
+        menuicon.SetActive(true);
         failPopupObject.SetActive(true);
         backgroundShadow.SetActive(false);
+        pausebutton.SetActive(false);
         sessionStarted = false;
     }
 
@@ -647,7 +731,6 @@ public class gamePlayManager : MonoBehaviour
     {
 
         string[] words = Regex.Split(text.ToLower(), @"\W+");
-        Debug.Log("11xxxx");
 
         if (sessionStarted)
         {
@@ -671,12 +754,15 @@ public class gamePlayManager : MonoBehaviour
                     successPopupObject.SetActive(true);
                 }
                 playfabManager.Instance.onSubmitScore(currentCombinationIndexLevel + 1);
+                menuicon.SetActive(true);
+                pausebutton.SetActive(false);
             }
             else
             {
                 onGameEnd();
             }
         }
+        pausebutton.SetActive(false);
     }
 
     public void nextLevel()
@@ -705,7 +791,6 @@ public class gamePlayManager : MonoBehaviour
 
     public void closeSideMenu()
     {
-        Debug.Log("2Dsasdasasdsad");
         sidemenu.SetActive(false);
     }
 
@@ -730,14 +815,10 @@ public class gamePlayManager : MonoBehaviour
             correctOption[e].SetActive(false);
         }
 
-        currentCombinationIndex = 0;
-        currentCombinationIndexLevel = 1;
         failPopupObject.SetActive(false);
         completePopupObject.SetActive(false);
         successPopupObject.SetActive(false);
-        sessionStarted = true;
-        levelText.text = "Level 1:";
-        stageText.text = "Stage 1";
+        sessionStarted = false;
         StopCoroutine(countDownCoroutine);
         onPlay();
     }
