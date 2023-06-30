@@ -58,7 +58,7 @@ public class gamePlayManager : MonoBehaviour
     {
         pausemenu.SetActive(false);
         mGamePaused = false;
-        if (!sessionStarted)
+        if (!sessionStarted && !failPopupObject.activeInHierarchy)
         {
             backgroundShadow.SetActive(true);
             light2D.color = nextColor;
@@ -292,6 +292,7 @@ public class gamePlayManager : MonoBehaviour
             index++;
         }
 
+        pausemenu.SetActive(false);
         failPopupObject.SetActive(true);
         backgroundShadow.SetActive(false);
         sessionStarted = false;
@@ -327,6 +328,7 @@ public class gamePlayManager : MonoBehaviour
                 playfabManager.Instance.onSubmitScore(currentCombinationIndexLevel + 1);
                 menuicon.SetActive(true);
                 pausebutton.SetActive(false);
+                sessionStarted = false;
             }
             else
             {
@@ -350,6 +352,8 @@ public class gamePlayManager : MonoBehaviour
         currentCombination = currentLevelLightCombinations[currentCombinationIndexLevel - 1];
         StartCoroutine(SwitchColorsCoroutine());
         StopCoroutine(countDownCoroutine);
+        pausebutton.SetActive(true);
+        menuicon.SetActive(false);
     }
 
     public void openSideMenu()
@@ -480,7 +484,7 @@ public class gamePlayManager : MonoBehaviour
     {
         pausemenu.SetActive(false);
         mGamePaused = false;
-        if (!sessionStarted)
+        if (!sessionStarted && !failPopupObject.activeInHierarchy)
         {
             backgroundShadow.SetActive(true);
             light2D.color = nextColor;
@@ -603,6 +607,7 @@ public class gamePlayManager : MonoBehaviour
         sessionStarted = true;
         countDownCoroutine = StartCoroutine(Countdown());
         mike.SetActive(false);
+
     }
 
     public Color GetDarkerTone(Color color)
@@ -719,6 +724,7 @@ public class gamePlayManager : MonoBehaviour
             index++;
         }
 
+        pausemenu.SetActive(false);
         pausebutton.SetActive(false);
         menuicon.SetActive(true);
         failPopupObject.SetActive(true);
@@ -756,6 +762,7 @@ public class gamePlayManager : MonoBehaviour
                 playfabManager.Instance.onSubmitScore(currentCombinationIndexLevel + 1);
                 menuicon.SetActive(true);
                 pausebutton.SetActive(false);
+                sessionStarted = false;
             }
             else
             {
@@ -780,6 +787,8 @@ public class gamePlayManager : MonoBehaviour
         currentCombination = currentLevelLightCombinations[currentCombinationIndexLevel - 1];
         StartCoroutine(SwitchColorsCoroutine());
         StopCoroutine(countDownCoroutine);
+        pausebutton.SetActive(true);
+        menuicon.SetActive(false);
     }
 
     public void openSideMenu()
