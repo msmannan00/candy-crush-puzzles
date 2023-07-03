@@ -11,6 +11,8 @@ public class loginController : MonoBehaviour
     public GameObject RegisterUI;
     public GameObject LoginUI;
     public GameObject ForgotUI;
+    public GameObject OnSignupGmail;
+    public GameObject OnSignupApple;
 
 
     [Header("Login Screen")]
@@ -25,6 +27,14 @@ public class loginController : MonoBehaviour
     public TMP_InputField ForgotEmailField;
 
 
+    private void Start()
+    {
+        playfabManager.Instance.OnServerInitialized();
+        #if !UNITY_IOS
+            OnSignupApple.SetActive(false);
+        #else
+        #endif
+    }
 
     public void OnTryLogin()
     {
@@ -39,7 +49,7 @@ public class loginController : MonoBehaviour
 
     public void OnPrivacyPolicy()
     {
-        Application.OpenURL("https://366degreefitresearch.com/headlights-privacy-policy");
+        Application.OpenURL("https://366degreefit.com/privacy-policy");
     }
 
     public void OnDummyLogin()
@@ -93,6 +103,15 @@ public class loginController : MonoBehaviour
     {
         UIBlocker.SetActive(true);
         playfabManager.Instance.OnSignGmail(callbackGmailSuccess, callbackGmailFailure, callbackLoginSuccess, callbackLoginFailure);
+    }
+
+    public void OnSignIOS()
+    {
+        #if UNITY_IOS
+           UIBlocker.SetActive(true);
+           playfabManager.Instance.OnSignIOS(callbackGmailSuccess, callbackGmailFailure, callbackLoginSuccess, callbackLoginFailure);
+        #else
+        #endif
     }
 
     public void OnSignFacebook()
@@ -183,11 +202,6 @@ public class loginController : MonoBehaviour
     {
         RegisterUI.SetActive(true);
         LoginUI.SetActive(false);
-    }
-
-    void Start()
-    {
-        playfabManager.Instance.OnServerInitialized();
     }
 
     void Update()

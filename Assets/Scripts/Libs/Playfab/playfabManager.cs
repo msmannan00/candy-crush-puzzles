@@ -6,6 +6,11 @@ using System.Collections.Generic;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 
+#if UNITY_IOS
+using UnityEngine.iOS;
+#else
+#endif
+
 public class playfabManager : GenericSingletonClass<playfabManager>
 {
 
@@ -74,6 +79,46 @@ public class playfabManager : GenericSingletonClass<playfabManager>
             }
         });
     }
+
+    #if UNITY_IOS
+            public void OnSignIOS(Action callbackSuccess, Action<PlayFabError> callbackFailure, Action<string, string> callbackSuccessPlayfab, Action<PlayFabError> callbackFailurePlayfab)
+        {
+            Device.RequestStoreReview();
+            if (Device.systemVersion.StartsWith("10"))
+            {
+                NativeAPI.Authorize((success) =>
+                {
+                    if (success)
+                    {
+                        OnTryLogin("player@gmail.com", "killprg1", callbackSuccessPlayfab, callbackFailurePlayfab);
+                        callbackSuccess();
+                    }
+                    else
+                    {
+                        callbackFailure(null);
+                    }
+                });
+            }
+            else
+            {
+                callbackFailure(null);
+            }
+        }
+
+        public static class NativeAPI
+        {
+            public delegate void SignInCallback(bool success);
+
+            public static void Authorize(SignInCallback callback)
+            {
+                // Native iOS code for sign-in authorization
+                // Call the callback with appropriate success value
+                bool success = true; // Replace with your sign-in logic
+                callback?.Invoke(success);
+            }
+        }
+    #else
+    #endif
 
     public void OnTryRegisterNewAccount(string email, string password, string fname, string lname, Action callbackSuccess, Action<PlayFabError> callbackFailure)
     {
