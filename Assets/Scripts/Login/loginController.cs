@@ -117,7 +117,8 @@ public class loginController : MonoBehaviour
     public void OnSignFacebook()
     {
         UIBlocker.SetActive(true);
-        playfabManager.Instance.OnSignInFacebook(callbackFacebookInitialized, callbackFacebookSuccess, callbackFacebookFailure);
+        Popup.Show("Password reset", "check your email address", "Dismiss");
+        UIBlocker.SetActive(false);
     }
 
     public void callbackLoginFailure(PlayFabError error)

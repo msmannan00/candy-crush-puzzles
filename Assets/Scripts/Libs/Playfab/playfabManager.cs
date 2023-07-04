@@ -148,20 +148,22 @@ public class playfabManager : GenericSingletonClass<playfabManager>
 
     public void InitiatePasswordRecovery(string email, Action callbackSuccess, Action<PlayFabError> callbackFailure)
     {
-        RegisterPlayFabUserRequest req = new RegisterPlayFabUserRequest
+        SendAccountRecoveryEmailRequest request = new SendAccountRecoveryEmailRequest
         {
-            Email = email, // or Username = emailOrUsername
+            Email = email,
             TitleId = "9AA0E"
         };
 
-        PlayFabClientAPI.RegisterPlayFabUser(req,
-        res =>
+        PlayFabClientAPI.SendAccountRecoveryEmail(request,
+        result =>
         {
+            Debug.Log("Password reset email sent successfully.");
             callbackSuccess();
         },
-        err =>
+        error =>
         {
-            callbackFailure(err);
+            Debug.LogError("Password reset failed: " + error.ErrorMessage);
+            callbackFailure(error);
         });
     }
 
