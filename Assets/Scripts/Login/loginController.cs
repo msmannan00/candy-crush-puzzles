@@ -101,8 +101,11 @@ public class loginController : MonoBehaviour
 
     public void OnSignGmail()
     {
+	#if !UNITY_IOS
         UIBlocker.SetActive(true);
-        playfabManager.Instance.OnSignGmail(callbackGmailSuccess, callbackGmailFailure, callbackLoginSuccess, callbackLoginFailure);
+        playfabManager.Instance.OnSignGmail(callbackGmailSuccess, callbackGmailFailure, 	callbackLoginSuccess, callbackLoginFailure);
+	#else
+	#endif
     }
 
     public void OnSignIOS()

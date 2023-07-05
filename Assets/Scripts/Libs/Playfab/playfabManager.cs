@@ -3,8 +3,12 @@ using PlayFab.ClientModels;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+
+#if !UNITY_IOS
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+#else
+#endif
 
 #if UNITY_IOS
 using UnityEngine.iOS;
@@ -16,14 +20,17 @@ public class playfabManager : GenericSingletonClass<playfabManager>
 
     public void OnServerInitialized()
     {
-        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
-        .AddOauthScope("profile")
-        .RequestServerAuthCode(false)
-        .Build();
+	#if !UNITY_IOS
+	        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
+        	.AddOauthScope("profile")
+        	.RequestServerAuthCode(false)
+	        .Build();
 
-        PlayGamesPlatform.InitializeInstance(config);
-        PlayGamesPlatform.DebugLogEnabled = false;
-        PlayGamesPlatform.Activate();
+	        PlayGamesPlatform.InitializeInstance(config);
+        	PlayGamesPlatform.DebugLogEnabled = false;
+	        PlayGamesPlatform.Activate();
+	#else
+	#endif
     }
 
     public void OnTryLogin(string email, string password, Action<string, string> callbackSuccess, Action<PlayFabError> callbackFailure)
@@ -50,6 +57,7 @@ public class playfabManager : GenericSingletonClass<playfabManager>
         // Implement logout functionality if required
     }
 
+#if !UNITY_IOS
     public void OnSignGmail(Action callbackSuccess, Action<PlayFabError> callbackFailure, Action<string, string> callbackSuccessPlayfab, Action<PlayFabError> callbackFailurePlayfab)
     {
 
@@ -79,6 +87,9 @@ public class playfabManager : GenericSingletonClass<playfabManager>
             }
         });
     }
+#else
+#endif
+
 
     #if UNITY_IOS
             public void OnSignIOS(Action callbackSuccess, Action<PlayFabError> callbackFailure, Action<string, string> callbackSuccessPlayfab, Action<PlayFabError> callbackFailurePlayfab)

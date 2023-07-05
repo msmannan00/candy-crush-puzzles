@@ -1,14 +1,19 @@
 using PlayFab;
 using System;
-using GooglePlayGames;
-using PlayFab.ClientModels;
-using UnityEngine;
-using GooglePlayGames;
-using GooglePlayGames.BasicApi;
+
+#if !UNITY_IOS
+	using GooglePlayGames;
+	using PlayFab.ClientModels;
+	using UnityEngine;
+	using GooglePlayGames;
+	using GooglePlayGames.BasicApi;
+#else
+#endif
 
 public class googleManager
 {
 
+#if !UNITY_IOS
     public googleManager()
     {
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
@@ -48,4 +53,6 @@ public class googleManager
             }
         });
     }
+#else
+#endif
 }
