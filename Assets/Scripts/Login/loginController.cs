@@ -11,6 +11,8 @@ public class loginController : MonoBehaviour
     public GameObject RegisterUI;
     public GameObject LoginUI;
     public GameObject ForgotUI;
+    public GameObject OnSignupGmail;
+    public GameObject OnSignupApple;
 
 
     [Header("Login Screen")]
@@ -25,6 +27,14 @@ public class loginController : MonoBehaviour
     public TMP_InputField ForgotEmailField;
 
 
+    private void Start()
+    {
+        playfabManager.Instance.OnServerInitialized();
+        #if !UNITY_IOS
+            OnSignupApple.SetActive(false);
+        #else
+        #endif
+    }
 
     public void OnTryLogin()
     {
@@ -32,9 +42,14 @@ public class loginController : MonoBehaviour
 
         string email = LoginEmailField.text;
         string password = LoginPasswordField.text;
-
+        PlayFabSettings.TitleId = "9AA0E";
         UIBlocker.SetActive(true);
         playfabManager.Instance.OnTryLogin(email, password, callbackLoginSuccess, callbackLoginFailure);
+    }
+
+    public void OnPrivacyPolicy()
+    {
+        Application.OpenURL("https://366degreefit.com/privacy-policy");
     }
 
     public void OnDummyLogin()
@@ -71,7 +86,7 @@ public class loginController : MonoBehaviour
         playfabManager.Instance.InitiatePasswordRecovery(email, callbackForgotSuccess, callbackForgotFailure);
     }
 
-    public void callbackLoginSuccess(string email, string playfabID )
+    public void callbackLoginSuccess(string email, string playfabID)
     {
         SceneManager.LoadScene("gameplay");
         userSessionManager.Instance.initialize(email, playfabID);
@@ -86,14 +101,27 @@ public class loginController : MonoBehaviour
 
     public void OnSignGmail()
     {
+	#if !UNITY_IOS
         UIBlocker.SetActive(true);
-        playfabManager.Instance.OnSignGmail(callbackGmailSuccess, callbackGmailFailure);
+        playfabManager.Instance.OnSignGmail(callbackGmailSuccess, callbackGmailFailure, 	callbackLoginSuccess, callbackLoginFailure);
+	#else
+	#endif
+    }
+
+    public void OnSignIOS()
+    {
+        #if UNITY_IOS
+           UIBlocker.SetActive(true);
+           playfabManager.Instance.OnSignIOS(callbackGmailSuccess, callbackGmailFailure, callbackLoginSuccess, callbackLoginFailure);
+        #else
+        #endif
     }
 
     public void OnSignFacebook()
     {
         UIBlocker.SetActive(true);
-        playfabManager.Instance.OnSignInFacebook(callbackFacebookInitialized, callbackFacebookSuccess, callbackFacebookFailure);
+        Popup.Show("Password reset", "check your email address", "Dismiss");
+        UIBlocker.SetActive(false);
     }
 
     public void callbackLoginFailure(PlayFabError error)
@@ -178,11 +206,6 @@ public class loginController : MonoBehaviour
     {
         RegisterUI.SetActive(true);
         LoginUI.SetActive(false);
-    }
-
-    void Start()
-    {
-
     }
 
     void Update()

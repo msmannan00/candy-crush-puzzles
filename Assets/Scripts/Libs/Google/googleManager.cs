@@ -1,35 +1,40 @@
 using PlayFab;
 using System;
-using GooglePlayGames;
-using PlayFab.ClientModels;
-using UnityEngine;
-//using GooglePlayGames;
-//using GooglePlayGames.BasicApi;
+
+#if !UNITY_IOS
+	using GooglePlayGames;
+	using PlayFab.ClientModels;
+	using UnityEngine;
+	using GooglePlayGames;
+	using GooglePlayGames.BasicApi;
+#else
+#endif
 
 public class googleManager
 {
 
+#if !UNITY_IOS
     public googleManager()
     {
-        /*PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
         .AddOauthScope("profile")
         .RequestServerAuthCode(false)
         .Build();
 
         PlayGamesPlatform.InitializeInstance(config);
         PlayGamesPlatform.DebugLogEnabled = true;
-        PlayGamesPlatform.Activate();*/
+        PlayGamesPlatform.Activate();
     }
 
     public void OnSignGmail(Action callbackSuccess, Action<PlayFabError> callbackFailure)
     {
-        /*Social.localUser.Authenticate((bool success) => {
+        Social.localUser.Authenticate((bool success) => {
             if (success)
             {
                 var serverAuthCode = PlayGamesPlatform.Instance.GetServerAuthCode();
                 PlayFabClientAPI.LoginWithGoogleAccount(new LoginWithGoogleAccountRequest()
                 {
-                    TitleId = PlayFabSettings.TitleId,
+                    TitleId = "9AA0E",
                     ServerAuthCode = serverAuthCode, 
                     CreateAccount = true
                 },
@@ -46,6 +51,8 @@ public class googleManager
             {
                 callbackFailure(null);
             }
-        });*/
+        });
     }
+#else
+#endif
 }

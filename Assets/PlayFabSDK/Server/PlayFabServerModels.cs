@@ -2086,6 +2086,7 @@ namespace PlayFab.ServerModels
         MultiplayerServerBuildReferencedByMatchmakingQueue,
         MultiplayerServerBuildReferencedByBuildAlias,
         MultiplayerServerBuildAliasReferencedByMatchmakingQueue,
+        PartySerializationError,
         ExperimentationExperimentStopped,
         ExperimentationExperimentRunning,
         ExperimentationExperimentNotFound,
@@ -2150,6 +2151,7 @@ namespace PlayFab.ServerModels
         TelemetryKeyInvalid,
         TelemetryKeyCountOverLimit,
         TelemetryKeyDeactivated,
+        TelemetryKeyLongInsightsRetentionNotAllowed,
         EventSinkConnectionInvalid,
         EventSinkConnectionUnauthorized,
         EventSinkRegionInvalid,
@@ -2164,7 +2166,19 @@ namespace PlayFab.ServerModels
         EventSinkDatabaseNotFound,
         OperationCanceled,
         InvalidDisplayNameRandomSuffixLength,
-        AllowNonUniquePlayerDisplayNamesDisableNotAllowed
+        AllowNonUniquePlayerDisplayNamesDisableNotAllowed,
+        PartitionedEventInvalid,
+        PartitionedEventCountOverLimit,
+        PlayerCustomPropertiesPropertyNameTooLong,
+        PlayerCustomPropertiesPropertyNameIsInvalid,
+        PlayerCustomPropertiesStringPropertyValueTooLong,
+        PlayerCustomPropertiesValueIsInvalidType,
+        PlayerCustomPropertiesVersionMismatch,
+        PlayerCustomPropertiesPropertyCountTooHigh,
+        PlayerCustomPropertiesDuplicatePropertyName,
+        PlayerCustomPropertiesPropertyDoesNotExist,
+        AddonAlreadyExists,
+        AddonDoesntExist
     }
 
     [Serializable]
@@ -2431,16 +2445,6 @@ namespace PlayFab.ServerModels
         /// </summary>
         public ExternalFriendSources? ExternalPlatformFriends;
         /// <summary>
-        /// Indicates whether Facebook friends should be included in the response. Default is true.
-        /// </summary>
-        [Obsolete("Use 'ExternalPlatformFriends' instead", true)]
-        public bool? IncludeFacebookFriends;
-        /// <summary>
-        /// Indicates whether Steam service friends should be included in the response. Default is true.
-        /// </summary>
-        [Obsolete("Use 'ExternalPlatformFriends' instead", true)]
-        public bool? IncludeSteamFriends;
-        /// <summary>
         /// Maximum number of entries to retrieve.
         /// </summary>
         public int MaxResultsCount;
@@ -2484,16 +2488,6 @@ namespace PlayFab.ServerModels
         /// comma-separated list of platforms.
         /// </summary>
         public ExternalFriendSources? ExternalPlatformFriends;
-        /// <summary>
-        /// Indicates whether Facebook friends should be included in the response. Default is true.
-        /// </summary>
-        [Obsolete("Use 'ExternalPlatformFriends' instead", true)]
-        public bool? IncludeFacebookFriends;
-        /// <summary>
-        /// Indicates whether Steam service friends should be included in the response. Default is true.
-        /// </summary>
-        [Obsolete("Use 'ExternalPlatformFriends' instead", true)]
-        public bool? IncludeSteamFriends;
         /// <summary>
         /// PlayFab identifier of the player whose friend list to get.
         /// </summary>
