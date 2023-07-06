@@ -49,6 +49,7 @@ public class gamePlayManager : MonoBehaviour
 
     private void Start()
     {
+        theme.Play();
         #if UNITY_EDITOR
                 recognizer = new DictationRecognizer();
                 recognizer.AutoSilenceTimeoutSeconds = 20f;
@@ -64,7 +65,6 @@ public class gamePlayManager : MonoBehaviour
                  SpeechToText.Instance.onResultCallback = OnVoiceCapture;
                  SpeechToText.Instance.isShowPopupAndroid = true;
                  Permission.RequestUserPermission(Permission.Microphone);
-                 theme.Play();
 	#else
         	Setting("en-US");
         	SpeechToText.Instance.onResultCallback = OnVoiceCapture;
@@ -171,7 +171,7 @@ public class gamePlayManager : MonoBehaviour
     Color nextColor = Color.black;
     private IEnumerator SwitchColorsCoroutine()
     {
-        menuicon.SetActive(false);
+        //menuicon.SetActive(false);
         mike.SetActive(false);
 
         float fadeDuration = 0.2f;
@@ -406,7 +406,7 @@ public class gamePlayManager : MonoBehaviour
 
         pausemenu.SetActive(false);
         pausebutton.SetActive(false);
-        menuicon.SetActive(true);
+        //menuicon.SetActive(true);
         failPopupObject.SetActive(true);
         backgroundShadow.SetActive(false);
         pausebutton.SetActive(false);
@@ -456,7 +456,7 @@ public class gamePlayManager : MonoBehaviour
                     successPopupObject.SetActive(true);
                 }
                 playfabManager.Instance.onSubmitScore(currentCombinationIndexLevel + 1);
-                menuicon.SetActive(true);
+                //menuicon.SetActive(true);
                 pausebutton.SetActive(false);
                 sessionStarted = false;
             }
@@ -491,7 +491,7 @@ public class gamePlayManager : MonoBehaviour
                     successPopupObject.SetActive(true);
                 }
                 playfabManager.Instance.onSubmitScore(currentCombinationIndexLevel + 1);
-                menuicon.SetActive(true);
+                //menuicon.SetActive(true);
                 pausebutton.SetActive(false);
                 sessionStarted = false;
             }
@@ -558,7 +558,7 @@ public class gamePlayManager : MonoBehaviour
         StartCoroutine(SwitchColorsCoroutine());
         StopCoroutine(countDownCoroutine);
         pausebutton.SetActive(true);
-        menuicon.SetActive(false);
+        //menuicon.SetActive(false);
     }
 
     public void openSideMenu()
