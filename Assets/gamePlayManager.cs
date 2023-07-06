@@ -339,18 +339,20 @@ public class gamePlayManager : MonoBehaviour
                 }
         #else
 	        mike.SetActive(true);
-        	SpeechToText.Instance.StartRecording("speak colors");
 	        int countdownValue = ((currentCombinationIndexLevel / 33) + 1) * 2;
                 if (currentCombinationIndexLevel <= 33)
                 {
                     countdownValue = 3;
+	            SpeechToText.Instance.StartRecording("you have 3 seconds to answer");
                 }else if(currentCombinationIndexLevel <= 66)
                 {
                     countdownValue = 5;
+	            SpeechToText.Instance.StartRecording("you have 5 seconds to answer");
                 }
                 else
                 {
                     countdownValue = 7;
+	            SpeechToText.Instance.StartRecording("you have 7 seconds to answer");
                 }
                 timer.text = countdownValue.ToString();
                 button.Play();
