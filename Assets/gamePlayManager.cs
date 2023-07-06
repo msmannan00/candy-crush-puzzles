@@ -49,6 +49,7 @@ public class gamePlayManager : MonoBehaviour
 
     private void Start()
     {
+        theme.Play();
         #if UNITY_EDITOR
                 recognizer = new DictationRecognizer();
                 recognizer.AutoSilenceTimeoutSeconds = 20f;
@@ -59,13 +60,16 @@ public class gamePlayManager : MonoBehaviour
                 recognizer.DictationComplete += OnDictationComplete;
                 recognizer.DictationError += OnDictationError;
                 recognizer.Start();
-        #elif PLATFORM_ANDROID
-                        Setting("en-US");
-                        SpeechToText.Instance.onResultCallback = OnVoiceCapture;
-                        SpeechToText.Instance.isShowPopupAndroid = true;
-                        Permission.RequestUserPermission(Permission.Microphone);
-                        theme.Play();
-        #endif
+#elif PLATFORM_ANDROID
+        Setting("en-US");
+        SpeechToText.Instance.onResultCallback = OnVoiceCapture;
+        SpeechToText.Instance.isShowPopupAndroid = true;
+        Permission.RequestUserPermission(Permission.Microphone);
+        theme.Play();
+#else
+        	Setting("en-US");
+        	SpeechToText.Instance.onResultCallback = OnVoiceCapture;
+#endif
     }
 
     private void initializeRecognizer()
@@ -168,7 +172,7 @@ public class gamePlayManager : MonoBehaviour
     Color nextColor = Color.black;
     private IEnumerator SwitchColorsCoroutine()
     {
-        menuicon.SetActive(false);
+        //menuicon.SetActive(false);
         mike.SetActive(false);
 
         float fadeDuration = 0.2f;
@@ -212,6 +216,7 @@ public class gamePlayManager : MonoBehaviour
         yield return FadeColor(light2D.color, Color.black, 0.2f);
         sessionStarted = true;
         countDownCoroutine = StartCoroutine(Countdown());
+        SpeechToText.Instance.StartRecording("Speak any");
         #if UNITY_EDITOR
                 mike.SetActive(true);
         #endif
@@ -326,14 +331,61 @@ public class gamePlayManager : MonoBehaviour
                 {
                     onGameEnd();
                 }
-        #else
-                SpeechToText.Instance.StartRecording("speak colors");
+#elif PLATFORM_ANDROID
+	            int countdownValue = ((currentCombinationIndexLevel / 33) + 1) * 2;
+                if (currentCombinationIndexLevel <= 33)
+                {
+    	            SpeechToText.Instance.StartRecording("you have 3 seconds to answer");
+                }else if(currentCombinationIndexLevel <= 66)
+                {
+	                SpeechToText.Instance.StartRecording("you have 5 seconds to answer");
+                }
+                else
+                {
+	                SpeechToText.Instance.StartRecording("you have 7 seconds to answer");
+                }
+
                 yield return new WaitForSeconds(0.5f);
                 if (sessionStarted)
                 {
                     onGameEnd();
                 }
-        #endif
+#else
+	        mike.SetActive(true);
+	        int countdownValue = ((currentCombinationIndexLevel / 33) + 1) * 2;
+                if (currentCombinationIndexLevel <= 33)
+                {
+                    countdownValue = 3;
+	            SpeechToText.Instance.StartRecording("you have 3 seconds to answer");
+                }else if(currentCombinationIndexLevel <= 66)
+                {
+                    countdownValue = 5;
+	            SpeechToText.Instance.StartRecording("you have 5 seconds to answer");
+                }
+                else
+                {
+                    countdownValue = 7;
+	            SpeechToText.Instance.StartRecording("you have 7 seconds to answer");
+                }
+                timer.text = countdownValue.ToString();
+                button.Play();
+
+	        while (countdownValue > 0)
+        	{
+                    yield return new WaitForSeconds(1f);
+                    if (!mGamePaused)
+                    {
+                        countdownValue--;
+                        timer.text = countdownValue.ToString();
+                        if (countdownValue > 0)
+                        {
+                            button.Play();
+                        }
+                    }
+	        }
+                timer.text = "";
+	        SpeechToText.Instance.StopRecording();
+#endif
     }
 
     private void onGameEnd()
@@ -369,7 +421,7 @@ public class gamePlayManager : MonoBehaviour
 
         pausemenu.SetActive(false);
         pausebutton.SetActive(false);
-        menuicon.SetActive(true);
+        //menuicon.SetActive(true);
         failPopupObject.SetActive(true);
         backgroundShadow.SetActive(false);
         pausebutton.SetActive(false);
@@ -393,8 +445,43 @@ public class gamePlayManager : MonoBehaviour
         private void OnVoiceCapture(string text)
     #endif
     {
-
+        #if UNITY_EDITOR
+	sessionStarted = false;
         string[] words = Regex.Split(text.ToLower(), @"\W+");
+
+        if (sessionStarted)
+        {
+            string[] allowedWords = { "red", "green", "blue", "white" };
+            words = words.Where(w => allowedWords.Contains(w)).ToArray();
+
+            sessionResult = words.ToList();
+            bool equal = sessionResult.SequenceEqual(currentLevelLightCombinations[currentCombinationIndexLevel - 1]);
+            if (sessionResult.Count == currentLevelLightCombinations[currentCombinationIndexLevel - 1].Count && equal)
+            {
+                Debug.Log("Result: " + currentCombinationIndex);
+                if (currentCombinationIndexLevel >= 99)
+                {
+                    currentCombinationIndex = 0;
+                    currentCombinationIndexLevel = 0;
+                    completePopupObject.SetActive(true);
+                }
+                if (countDownCoroutine != null)
+                {
+                    StopCoroutine(countDownCoroutine);
+                    successPopupObject.SetActive(true);
+                }
+                playfabManager.Instance.onSubmitScore(currentCombinationIndexLevel + 1);
+                //menuicon.SetActive(true);
+                pausebutton.SetActive(false);
+                sessionStarted = false;
+            }
+            else
+            {
+                onGameEnd();
+            }
+        }
+#elif PLATFORM_ANDROID
+	        string[] words = Regex.Split(text.ToLower(), @"\W+");
 
         if (sessionStarted)
         {
@@ -427,8 +514,46 @@ public class gamePlayManager : MonoBehaviour
                 onGameEnd();
             }
         }
-        #if PLATFORM_ANDROID
-            pausebutton.SetActive(false);
+        pausebutton.SetActive(false);
+#else
+	if(text == null || text.Length==0){
+            onGameEnd();
+            return;
+        }
+        string[] words = Regex.Split(text.ToLower(), @"\W+");
+
+        if (sessionStarted)
+        {
+            string[] allowedWords = { "red", "green", "blue", "white" };
+            words = words.Where(w => allowedWords.Contains(w)).ToArray();
+
+            sessionResult = words.ToList();
+            bool equal = sessionResult.SequenceEqual(currentLevelLightCombinations[currentCombinationIndexLevel - 1]);
+            if (sessionResult.Count == currentLevelLightCombinations[currentCombinationIndexLevel - 1].Count && equal)
+            {
+                Debug.Log("Result: " + currentCombinationIndex);
+                if (currentCombinationIndexLevel >= 99)
+                {
+                    currentCombinationIndex = 0;
+                    currentCombinationIndexLevel = 0;
+                    completePopupObject.SetActive(true);
+                }
+                if (countDownCoroutine != null)
+                {
+                    StopCoroutine(countDownCoroutine);
+                    successPopupObject.SetActive(true);
+                }
+                playfabManager.Instance.onSubmitScore(currentCombinationIndexLevel + 1);
+            }
+            else
+            {
+                onGameEnd();
+            }
+	}
+#endif
+
+#if PLATFORM_ANDROID
+        pausebutton.SetActive(false);
         #endif
     }
 
@@ -448,7 +573,7 @@ public class gamePlayManager : MonoBehaviour
         StartCoroutine(SwitchColorsCoroutine());
         StopCoroutine(countDownCoroutine);
         pausebutton.SetActive(true);
-        menuicon.SetActive(false);
+        //menuicon.SetActive(false);
     }
 
     public void openSideMenu()

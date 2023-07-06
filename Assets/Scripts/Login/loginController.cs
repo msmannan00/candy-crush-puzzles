@@ -13,6 +13,8 @@ public class loginController : MonoBehaviour
     public GameObject ForgotUI;
     public GameObject OnSignupGmail;
     public GameObject OnSignupApple;
+    public GameObject video;
+    public GameObject videosmall;
 
 
     [Header("Login Screen")]
@@ -30,9 +32,46 @@ public class loginController : MonoBehaviour
     private void Start()
     {
         playfabManager.Instance.OnServerInitialized();
+        showVideo();
+    }
+
+    public void showVideo()
+    {
         #if !UNITY_IOS
-            OnSignupApple.SetActive(false);
+                OnSignupApple.SetActive(false);
         #else
+        #endif
+
+        #if UNITY_EDITOR
+                // Running in Unity Editor
+                video.SetActive(true);
+        #elif UNITY_ANDROID
+            // Running on Android device
+            if (SystemInfo.deviceModel.Contains("pad") || SystemInfo.deviceModel.Contains("tablet"))
+            {
+                // Android tablet
+	                videosmall.SetActive(true);
+            }
+            else
+            {
+                // Android phone
+	                video.SetActive(true);
+            }
+        #elif UNITY_IOS
+            // Running on iOS device
+            if (SystemInfo.deviceModel.Contains("iPad"))
+            {
+                // iPad
+	                videosmall.SetActive(true);
+            }
+            else
+            {
+                // iPhone
+	                video.SetActive(true);
+            }
+        #else
+            // Unsupported platform
+	                videosmall.SetActive(true);
         #endif
     }
 
@@ -40,30 +79,41 @@ public class loginController : MonoBehaviour
     {
         //SceneManager.LoadScene("gameplay");
 
+        video.SetActive(false);
+        videosmall.SetActive(false);
         string email = LoginEmailField.text;
         string password = LoginPasswordField.text;
         PlayFabSettings.TitleId = "9AA0E";
         UIBlocker.SetActive(true);
-        playfabManager.Instance.OnTryLogin(email, password, callbackLoginSuccess, callbackLoginFailure);
+        playfabManager.Instance.OnTryLogin(email, password, callbackLoginSuccess, 			callbackLoginFailure);
     }
 
     public void OnPrivacyPolicy()
     {
-        Application.OpenURL("https://366degreefit.com/privacy-policy");
+        Application.OpenURL("https://www.366degreefitvirtual.com/privacy-policy");
+    }
+
+    public void OnOpenApp()
+    {
+        Application.OpenURL("https://366degreefitvirtual.com");
     }
 
     public void OnDummyLogin()
     {
+        video.SetActive(false);
+        videosmall.SetActive(false);
         SceneManager.LoadScene("gameplay");
-    }
+}
 
-    public void OnTryRegisterNewAccount()
+public void OnTryRegisterNewAccount()
     {
         string email = RegisterEmailField.text;
         string password = RegisterPasswordwordField.text;
         string fname = RegisterEmailFieldFirstName.text;
         string lname = RegisterEmailFieldLastName.text;
 
+        video.SetActive(false);
+        videosmall.SetActive(false);
         UIBlocker.SetActive(true);
         playfabManager.Instance.OnTryRegisterNewAccount(email, password, fname, lname, callbackRegisterationSuccess, callbackRegisterationFailure);
     }
@@ -88,6 +138,8 @@ public class loginController : MonoBehaviour
 
     public void callbackLoginSuccess(string email, string playfabID)
     {
+        video.SetActive(false);
+        videosmall.SetActive(false);
         SceneManager.LoadScene("gameplay");
         userSessionManager.Instance.initialize(email, playfabID);
         UIBlocker.SetActive(false);
@@ -101,7 +153,9 @@ public class loginController : MonoBehaviour
 
     public void OnSignGmail()
     {
-	#if !UNITY_IOS
+    #if !UNITY_IOS
+        video.SetActive(false);
+        videosmall.SetActive(false);
         UIBlocker.SetActive(true);
         playfabManager.Instance.OnSignGmail(callbackGmailSuccess, callbackGmailFailure, 	callbackLoginSuccess, callbackLoginFailure);
 	#else
@@ -111,8 +165,10 @@ public class loginController : MonoBehaviour
     public void OnSignIOS()
     {
         #if UNITY_IOS
-           UIBlocker.SetActive(true);
-           playfabManager.Instance.OnSignIOS(callbackGmailSuccess, callbackGmailFailure, callbackLoginSuccess, callbackLoginFailure);
+                video.SetActive(false);
+                videosmall.SetActive(false);
+                   UIBlocker.SetActive(true);
+                   playfabManager.Instance.OnSignIOS(callbackGmailSuccess, callbackGmailFailure, callbackLoginSuccess, callbackLoginFailure);
         #else
         #endif
     }
@@ -126,18 +182,22 @@ public class loginController : MonoBehaviour
 
     public void callbackLoginFailure(PlayFabError error)
     {
+        showVideo();
         Popup.Show("Oops!", error.ErrorMessage, "Dismiss");
         UIBlocker.SetActive(false);
     }
 
     public void callbackRegisterationSuccess()
     {
+        video.SetActive(false);
+        videosmall.SetActive(false);
         SceneManager.LoadScene("gameplay");
         UIBlocker.SetActive(false);
     }
 
     public void callbackRegisterationFailure(PlayFabError error)
     {
+        showVideo();
         Popup.Show("Oops!", error.ErrorMessage, "Dismiss");
         UIBlocker.SetActive(false);
     }
@@ -145,12 +205,15 @@ public class loginController : MonoBehaviour
     public void callbackGmailSuccess()
     {
         userSessionManager.Instance.initialize("gmail_session", "none");
+        video.SetActive(false);
+        videosmall.SetActive(false);
         SceneManager.LoadScene("gameplay");
         UIBlocker.SetActive(false);
     }
 
     public void callbackGmailFailure(PlayFabError error)
     {
+        showVideo();
         UIBlocker.SetActive(false);
         if (error == null)
         {
@@ -172,6 +235,7 @@ public class loginController : MonoBehaviour
 
     public void callbackForgotFailure(PlayFabError error)
     {
+        showVideo();
         UIBlocker.SetActive(false);
         ForgotEmailField.text = "";
         if (error == null)
@@ -191,6 +255,8 @@ public class loginController : MonoBehaviour
 
     public void callbackFacebookSuccess()
     {
+        video.SetActive(false);
+        videosmall.SetActive(false);
         SceneManager.LoadScene("gameplay");
         userSessionManager.Instance.initialize("facebook_session", "none");
         UIBlocker.SetActive(false);
@@ -198,6 +264,7 @@ public class loginController : MonoBehaviour
 
     public void callbackFacebookFailure(PlayFabError error)
     {
+        showVideo();
         Popup.Show("Oops!", error.ErrorMessage, "Dismiss");
         UIBlocker.SetActive(false);
     }
