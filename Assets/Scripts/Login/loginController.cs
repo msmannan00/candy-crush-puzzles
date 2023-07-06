@@ -13,6 +13,8 @@ public class loginController : MonoBehaviour
     public GameObject ForgotUI;
     public GameObject OnSignupGmail;
     public GameObject OnSignupApple;
+    public GameObject video;
+    public GameObject videosmall;
 
 
     [Header("Login Screen")]
@@ -34,6 +36,39 @@ public class loginController : MonoBehaviour
             OnSignupApple.SetActive(false);
         #else
         #endif
+
+#if UNITY_EDITOR
+    // Running in Unity Editor
+    Debug.Log("Running in Unity Editor. Unable to determine device type.");
+#elif UNITY_ANDROID
+    // Running on Android device
+    if (SystemInfo.deviceModel.Contains("pad") || SystemInfo.deviceModel.Contains("tablet"))
+    {
+        // Android tablet
+	        videosmall.SetActive(true);
+    }
+    else
+    {
+        // Android phone
+	        video.SetActive(true);
+    }
+#elif UNITY_IOS
+    // Running on iOS device
+    if (SystemInfo.deviceModel.Contains("iPad"))
+    {
+        // iPad
+	        videosmall.SetActive(true);
+    }
+    else
+    {
+        // iPhone
+	        video.SetActive(true);
+    }
+#else
+    // Unsupported platform
+	        videosmall.SetActive(true);
+#endif
+
     }
 
     public void OnTryLogin()
@@ -44,7 +79,7 @@ public class loginController : MonoBehaviour
         string password = LoginPasswordField.text;
         PlayFabSettings.TitleId = "9AA0E";
         UIBlocker.SetActive(true);
-        playfabManager.Instance.OnTryLogin(email, password, callbackLoginSuccess, callbackLoginFailure);
+        playfabManager.Instance.OnTryLogin(email, password, callbackLoginSuccess, 			callbackLoginFailure);
     }
 
     public void OnPrivacyPolicy()

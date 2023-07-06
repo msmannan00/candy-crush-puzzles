@@ -60,11 +60,14 @@ public class gamePlayManager : MonoBehaviour
                 recognizer.DictationError += OnDictationError;
                 recognizer.Start();
         #elif PLATFORM_ANDROID
-                        Setting("en-US");
-                        SpeechToText.Instance.onResultCallback = OnVoiceCapture;
-                        SpeechToText.Instance.isShowPopupAndroid = true;
-                        Permission.RequestUserPermission(Permission.Microphone);
-                        theme.Play();
+                 Setting("en-US");
+                 SpeechToText.Instance.onResultCallback = OnVoiceCapture;
+                 SpeechToText.Instance.isShowPopupAndroid = true;
+                 Permission.RequestUserPermission(Permission.Microphone);
+                 theme.Play();
+	#else
+        	Setting("en-US");
+        	SpeechToText.Instance.onResultCallback = OnVoiceCapture;
         #endif
     }
 
@@ -212,6 +215,7 @@ public class gamePlayManager : MonoBehaviour
         yield return FadeColor(light2D.color, Color.black, 0.2f);
         sessionStarted = true;
         countDownCoroutine = StartCoroutine(Countdown());
+        SpeechToText.Instance.StartRecording("Speak any");
         #if UNITY_EDITOR
                 mike.SetActive(true);
         #endif
@@ -326,13 +330,46 @@ public class gamePlayManager : MonoBehaviour
                 {
                     onGameEnd();
                 }
-        #else
+        #elif PLATFORM_ANDROID
                 SpeechToText.Instance.StartRecording("speak colors");
                 yield return new WaitForSeconds(0.5f);
                 if (sessionStarted)
                 {
                     onGameEnd();
                 }
+        #else
+	        mike.SetActive(true);
+        	SpeechToText.Instance.StartRecording("speak colors");
+	        int countdownValue = ((currentCombinationIndexLevel / 33) + 1) * 2;
+                if (currentCombinationIndexLevel <= 33)
+                {
+                    countdownValue = 3;
+                }else if(currentCombinationIndexLevel <= 66)
+                {
+                    countdownValue = 5;
+                }
+                else
+                {
+                    countdownValue = 7;
+                }
+                timer.text = countdownValue.ToString();
+                button.Play();
+
+	        while (countdownValue > 0)
+        	{
+                    yield return new WaitForSeconds(1f);
+                    if (!mGamePaused)
+                    {
+                        countdownValue--;
+                        timer.text = countdownValue.ToString();
+                        if (countdownValue > 0)
+                        {
+                            button.Play();
+                        }
+                    }
+	        }
+                timer.text = "";
+	        SpeechToText.Instance.StopRecording();
         #endif
     }
 
@@ -393,7 +430,8 @@ public class gamePlayManager : MonoBehaviour
         private void OnVoiceCapture(string text)
     #endif
     {
-
+        #if UNITY_EDITOR
+	sessionStarted = false;
         string[] words = Regex.Split(text.ToLower(), @"\W+");
 
         if (sessionStarted)
@@ -427,6 +465,78 @@ public class gamePlayManager : MonoBehaviour
                 onGameEnd();
             }
         }
+        #elif PLATFORM_ANDROID
+	sessionStarted = false;
+        string[] words = Regex.Split(text.ToLower(), @"\W+");
+
+        if (sessionStarted)
+        {
+            string[] allowedWords = { "red", "green", "blue", "white" };
+            words = words.Where(w => allowedWords.Contains(w)).ToArray();
+
+            sessionResult = words.ToList();
+            bool equal = sessionResult.SequenceEqual(currentLevelLightCombinations[currentCombinationIndexLevel - 1]);
+            if (sessionResult.Count == currentLevelLightCombinations[currentCombinationIndexLevel - 1].Count && equal)
+            {
+                Debug.Log("Result: " + currentCombinationIndex);
+                if (currentCombinationIndexLevel >= 99)
+                {
+                    currentCombinationIndex = 0;
+                    currentCombinationIndexLevel = 0;
+                    completePopupObject.SetActive(true);
+                }
+                if (countDownCoroutine != null)
+                {
+                    StopCoroutine(countDownCoroutine);
+                    successPopupObject.SetActive(true);
+                }
+                playfabManager.Instance.onSubmitScore(currentCombinationIndexLevel + 1);
+                menuicon.SetActive(true);
+                pausebutton.SetActive(false);
+                sessionStarted = false;
+            }
+            else
+            {
+                onGameEnd();
+            }
+        }
+	#else
+	if(text == null || text.Length==0){
+            onGameEnd();
+            return;
+        }
+        string[] words = Regex.Split(text.ToLower(), @"\W+");
+
+        if (sessionStarted)
+        {
+            string[] allowedWords = { "red", "green", "blue", "white" };
+            words = words.Where(w => allowedWords.Contains(w)).ToArray();
+
+            sessionResult = words.ToList();
+            bool equal = sessionResult.SequenceEqual(currentLevelLightCombinations[currentCombinationIndexLevel - 1]);
+            if (sessionResult.Count == currentLevelLightCombinations[currentCombinationIndexLevel - 1].Count && equal)
+            {
+                Debug.Log("Result: " + currentCombinationIndex);
+                if (currentCombinationIndexLevel >= 99)
+                {
+                    currentCombinationIndex = 0;
+                    currentCombinationIndexLevel = 0;
+                    completePopupObject.SetActive(true);
+                }
+                if (countDownCoroutine != null)
+                {
+                    StopCoroutine(countDownCoroutine);
+                    successPopupObject.SetActive(true);
+                }
+                playfabManager.Instance.onSubmitScore(currentCombinationIndexLevel + 1);
+            }
+            else
+            {
+                onGameEnd();
+            }
+	}
+        #endif
+
         #if PLATFORM_ANDROID
             pausebutton.SetActive(false);
         #endif
