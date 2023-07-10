@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/AppleAuth/Native/iOS/AppleAuthManager.m.meta
 guid: 4ea7c90f3e44b49608eed2c1ae802944
+========
+guid: 1e6b72809d9044a83885801f89f8e67f
+>>>>>>>> android-builder:Assets/AppleAuth/Native/iOS/AppleAuthSerializer.m.meta
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2

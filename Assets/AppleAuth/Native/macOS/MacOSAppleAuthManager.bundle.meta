@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/AppleAuth/Native/macOS/MacOSAppleAuthManager.bundle.meta
 guid: 548ccbccbc9354c109695ee6c218fe1b
 folderAsset: yes
+========
+guid: 4ea7c90f3e44b49608eed2c1ae802944
+>>>>>>>> android-builder:Assets/AppleAuth/Native/iOS/AppleAuthManager.m.meta
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -25,6 +29,11 @@ PluginImporter:
         DefaultValueInitialized: true
   - first:
       Standalone: OSXUniversal
+    second:
+      enabled: 1
+      settings: {}
+  - first:
+      tvOS: tvOS
     second:
       enabled: 1
       settings: {}

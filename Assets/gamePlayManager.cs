@@ -60,15 +60,16 @@ public class gamePlayManager : MonoBehaviour
                 recognizer.DictationComplete += OnDictationComplete;
                 recognizer.DictationError += OnDictationError;
                 recognizer.Start();
-        #elif PLATFORM_ANDROID
-                 Setting("en-US");
-                 SpeechToText.Instance.onResultCallback = OnVoiceCapture;
-                 SpeechToText.Instance.isShowPopupAndroid = true;
-                 Permission.RequestUserPermission(Permission.Microphone);
-	#else
+#elif PLATFORM_ANDROID
+        Setting("en-US");
+        SpeechToText.Instance.onResultCallback = OnVoiceCapture;
+        SpeechToText.Instance.isShowPopupAndroid = true;
+        Permission.RequestUserPermission(Permission.Microphone);
+        theme.Play();
+#else
         	Setting("en-US");
         	SpeechToText.Instance.onResultCallback = OnVoiceCapture;
-        #endif
+#endif
     }
 
     private void initializeRecognizer()
@@ -330,14 +331,26 @@ public class gamePlayManager : MonoBehaviour
                 {
                     onGameEnd();
                 }
-        #elif PLATFORM_ANDROID
-                SpeechToText.Instance.StartRecording("speak colors");
+#elif PLATFORM_ANDROID
+	            int countdownValue = ((currentCombinationIndexLevel / 33) + 1) * 2;
+                if (currentCombinationIndexLevel <= 33)
+                {
+    	            SpeechToText.Instance.StartRecording("you have 3 seconds to answer");
+                }else if(currentCombinationIndexLevel <= 66)
+                {
+	                SpeechToText.Instance.StartRecording("you have 5 seconds to answer");
+                }
+                else
+                {
+	                SpeechToText.Instance.StartRecording("you have 7 seconds to answer");
+                }
+
                 yield return new WaitForSeconds(0.5f);
                 if (sessionStarted)
                 {
                     onGameEnd();
                 }
-        #else
+#else
 	        mike.SetActive(true);
 	        int countdownValue = ((currentCombinationIndexLevel / 33) + 1) * 2;
                 if (currentCombinationIndexLevel <= 33)
@@ -372,7 +385,7 @@ public class gamePlayManager : MonoBehaviour
 	        }
                 timer.text = "";
 	        SpeechToText.Instance.StopRecording();
-        #endif
+#endif
     }
 
     private void onGameEnd()
@@ -467,9 +480,8 @@ public class gamePlayManager : MonoBehaviour
                 onGameEnd();
             }
         }
-        #elif PLATFORM_ANDROID
-	sessionStarted = false;
-        string[] words = Regex.Split(text.ToLower(), @"\W+");
+#elif PLATFORM_ANDROID
+	        string[] words = Regex.Split(text.ToLower(), @"\W+");
 
         if (sessionStarted)
         {
@@ -493,7 +505,7 @@ public class gamePlayManager : MonoBehaviour
                     successPopupObject.SetActive(true);
                 }
                 playfabManager.Instance.onSubmitScore(currentCombinationIndexLevel + 1);
-                //menuicon.SetActive(true);
+                menuicon.SetActive(true);
                 pausebutton.SetActive(false);
                 sessionStarted = false;
             }
@@ -502,7 +514,8 @@ public class gamePlayManager : MonoBehaviour
                 onGameEnd();
             }
         }
-	#else
+        pausebutton.SetActive(false);
+#else
 	if(text == null || text.Length==0){
             onGameEnd();
             return;
@@ -537,10 +550,10 @@ public class gamePlayManager : MonoBehaviour
                 onGameEnd();
             }
 	}
-        #endif
+#endif
 
-        #if PLATFORM_ANDROID
-            pausebutton.SetActive(false);
+#if PLATFORM_ANDROID
+        pausebutton.SetActive(false);
         #endif
     }
 
