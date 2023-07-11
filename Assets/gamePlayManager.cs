@@ -151,13 +151,15 @@ public class gamePlayManager : MonoBehaviour
 
     public void onPlay()
     {
-        button.Play();
-        backgroundShadow.SetActive(true);
-        initializeLevel();
-        playButton.SetActive(false);
-        pausebutton.SetActive(true);
-        theme.Stop();
-        defaultDot.SetActive(false);
+        playfabManager.Instance.onSubmitScore(currentCombinationIndexLevel + 1);
+
+        //button.Play();
+        //backgroundShadow.SetActive(true);
+        //initializeLevel();
+        //playButton.SetActive(false);
+        //pausebutton.SetActive(true);
+        //theme.Stop();
+        //defaultDot.SetActive(false);
     }
 
     private void initializeLevel()
