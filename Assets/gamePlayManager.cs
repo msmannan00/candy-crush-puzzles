@@ -97,7 +97,6 @@ public class gamePlayManager : MonoBehaviour
 
     public void showLeaderBoard()
     {
-        sidemenu.SetActive(false);
         leaderboard.SetActive(true);
     }
 
@@ -387,6 +386,11 @@ public class gamePlayManager : MonoBehaviour
 	        }
                 timer.text = "";
 	        SpeechToText.Instance.StopRecording();
+                yield return new WaitForSeconds(1f);
+                if (sessionStarted)
+                {
+                    onGameEnd();
+                }
 #endif
     }
 
@@ -584,6 +588,12 @@ public class gamePlayManager : MonoBehaviour
         {
             sidemenu.SetActive(true);
         }
+        if (!failPopupObject.activeInHierarchy && !playButton.activeInHierarchy && !successPopupObject.activeInHierarchy && !successPopupObject.activeInHierarchy && !completePopupObject.activeInHierarchy)
+        {
+		onPauseGame();
+        }
+        theme.Stop();
+
     }
 
     public void closeSideMenu()
