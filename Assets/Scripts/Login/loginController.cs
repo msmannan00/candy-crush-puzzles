@@ -93,6 +93,11 @@ public class loginController : MonoBehaviour
         Application.OpenURL("https://366degreefit.com/privacy-policy");
     }
 
+    public void OnOpenWebsite()
+    {
+        Application.OpenURL("https://366degreefit.com");
+    }
+
     public void OnDummyLogin()
     {
         video.SetActive(false);
