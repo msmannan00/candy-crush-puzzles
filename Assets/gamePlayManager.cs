@@ -609,6 +609,7 @@ public class gamePlayManager : MonoBehaviour
 
     public void logout()
     {
+        playfabManager.Instance.OnLogoutForced();
         helperMethods.GetInstance().RestartScene("login");
     }
 
@@ -630,6 +631,6 @@ public class gamePlayManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        SpeechToText.Instance.StopRecording();
+        //SpeechToText.Instance.StopRecording();
     }
 }

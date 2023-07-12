@@ -42,7 +42,7 @@ public class leaderboardManager : MonoBehaviour
     public void callbackSuccess(GetLeaderboardResult result)
     {
         imageBlocker.SetActive(false);
-        for (int i = 0; i < result.Leaderboard.Count; i++)
+        for (int i = 0; i < result.Leaderboard.Count-1; i++)
         {
             var entry = result.Leaderboard[i];
             string playerName = entry.DisplayName;

@@ -3,6 +3,7 @@ using TMPro;
 using PlayFab;
 using EasyUI.Popup;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class loginController : MonoBehaviour
 {
@@ -33,6 +34,28 @@ public class loginController : MonoBehaviour
     {
         playfabManager.Instance.OnServerInitialized();
         showVideo();
+
+        StartCoroutine(LoginRoutine());
+    }
+
+    private IEnumerator LoginRoutine()
+    {
+        yield return null; // Wait for one frame to allow the loader UI to update
+        bool usernameExists = PlayerPrefs.HasKey("username");
+        bool passwordExists = PlayerPrefs.HasKey("password");
+
+        if (usernameExists && passwordExists)
+        {
+            string username = PlayerPrefs.GetString("username");
+            string password = PlayerPrefs.GetString("password");
+
+            video.SetActive(false);
+            videosmall.SetActive(false);
+            PlayFabSettings.TitleId = "9AA0E";
+            UIBlocker.SetActive(true);
+            playfabManager.Instance.OnTryLogin(username, password, callbackLoginSuccess, callbackLoginFailure);
+        }
+
     }
 
     public void showVideo()
