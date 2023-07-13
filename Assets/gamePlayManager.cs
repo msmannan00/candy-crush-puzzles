@@ -450,7 +450,6 @@ public class gamePlayManager : MonoBehaviour
     #endif
     {
         #if UNITY_EDITOR
-	sessionStarted = false;
         string[] words = Regex.Split(text.ToLower(), @"\W+");
 
         if (sessionStarted)
@@ -520,6 +519,9 @@ public class gamePlayManager : MonoBehaviour
         }
         pausebutton.SetActive(false);
 #else
+	if(mGamePaused){
+	    return;
+	}
 	if(text == null || text.Length==0){
             onGameEnd();
             return;
@@ -582,10 +584,7 @@ public class gamePlayManager : MonoBehaviour
 
     public void openSideMenu()
     {
-        if (!sessionStarted)
-        {
-            sidemenu.SetActive(true);
-        }
+        sidemenu.SetActive(true);
         if (!failPopupObject.activeInHierarchy && !playButton.activeInHierarchy && !successPopupObject.activeInHierarchy && !successPopupObject.activeInHierarchy && !completePopupObject.activeInHierarchy)
         {
 		onPauseGame();
