@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/AppleAuth/Native/iOS/PersonNameComponentsFormatting.m.meta
 guid: b89ca8ecbea5c4f0dad838a9fde67910
+========
+guid: 11e16916ddef24a22b24c934116b75df
+>>>>>>>> android-builder:Assets/AppleAuth/Native/iOS/AppleAuthManager.h.meta
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -14,7 +18,7 @@ PluginImporter:
   - first:
       Any: 
     second:
-      enabled: 0
+      enabled: 1
       settings: {}
   - first:
       Editor: Editor
@@ -22,6 +26,7 @@ PluginImporter:
       enabled: 0
       settings:
         DefaultValueInitialized: true
+<<<<<<<< HEAD:Assets/AppleAuth/Native/iOS/PersonNameComponentsFormatting.m.meta
   - first:
       iPhone: iOS
     second:
@@ -32,6 +37,8 @@ PluginImporter:
     second:
       enabled: 1
       settings: {}
+========
+>>>>>>>> android-builder:Assets/AppleAuth/Native/iOS/AppleAuthManager.h.meta
   userData: 
   assetBundleName: 
   assetBundleVariant: 

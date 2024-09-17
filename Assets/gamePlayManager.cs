@@ -97,7 +97,6 @@ public class gamePlayManager : MonoBehaviour
 
     public void showLeaderBoard()
     {
-        sidemenu.SetActive(false);
         leaderboard.SetActive(true);
     }
 
@@ -385,6 +384,11 @@ public class gamePlayManager : MonoBehaviour
 	        }
                 timer.text = "";
 	        SpeechToText.Instance.StopRecording();
+                yield return new WaitForSeconds(1f);
+                if (sessionStarted)
+                {
+                    onGameEnd();
+                }
 #endif
     }
 
@@ -446,7 +450,6 @@ public class gamePlayManager : MonoBehaviour
     #endif
     {
         #if UNITY_EDITOR
-	sessionStarted = false;
         string[] words = Regex.Split(text.ToLower(), @"\W+");
 
         if (sessionStarted)
@@ -516,6 +519,9 @@ public class gamePlayManager : MonoBehaviour
         }
         pausebutton.SetActive(false);
 #else
+	if(mGamePaused){
+	    return;
+	}
 	if(text == null || text.Length==0){
             onGameEnd();
             return;
@@ -578,10 +584,13 @@ public class gamePlayManager : MonoBehaviour
 
     public void openSideMenu()
     {
-        if (!sessionStarted)
+        sidemenu.SetActive(true);
+        if (!failPopupObject.activeInHierarchy && !playButton.activeInHierarchy && !successPopupObject.activeInHierarchy && !successPopupObject.activeInHierarchy && !completePopupObject.activeInHierarchy)
         {
-            sidemenu.SetActive(true);
+		onPauseGame();
         }
+        theme.Stop();
+
     }
 
     public void closeSideMenu()
@@ -599,6 +608,7 @@ public class gamePlayManager : MonoBehaviour
 
     public void logout()
     {
+        playfabManager.Instance.OnLogoutForced();
         helperMethods.GetInstance().RestartScene("login");
     }
 
@@ -620,6 +630,6 @@ public class gamePlayManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        SpeechToText.Instance.StopRecording();
+        //SpeechToText.Instance.StopRecording();
     }
 }

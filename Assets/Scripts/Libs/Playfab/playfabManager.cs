@@ -18,6 +18,15 @@ using UnityEngine.iOS;
 public class playfabManager : GenericSingletonClass<playfabManager>
 {
 
+    public void saveuser(string username, string password)
+    {
+        PlayerPrefs.SetString("username", username);
+        PlayerPrefs.SetString("password", password);
+        PlayerPrefs.Save();
+    }
+
+
+
     public void OnServerInitialized()
     {
 	#if !UNITY_IOS
@@ -26,11 +35,12 @@ public class playfabManager : GenericSingletonClass<playfabManager>
         	.RequestServerAuthCode(false)
 	        .Build();
 
-	        PlayGamesPlatform.InitializeInstance(config);
+            PlayGamesPlatform.InitializeInstance(config);
         	PlayGamesPlatform.DebugLogEnabled = false;
 	        PlayGamesPlatform.Activate();
-	#else
-	#endif
+
+#else
+#endif
     }
 
     public void OnTryLogin(string email, string password, Action<string, string> callbackSuccess, Action<PlayFabError> callbackFailure)
@@ -44,6 +54,7 @@ public class playfabManager : GenericSingletonClass<playfabManager>
         PlayFabClientAPI.LoginWithEmailAddress(req,
         res =>
         {
+            saveuser(email, password);
             callbackSuccess(email, res.PlayFabId);
         },
         err =>
@@ -54,7 +65,16 @@ public class playfabManager : GenericSingletonClass<playfabManager>
 
     public void OnLogout(string username, string playfabID, Action callbackSuccess, Action<PlayFabError> callbackFailure)
     {
-        // Implement logout functionality if required
+        PlayerPrefs.DeleteKey("username");
+        PlayerPrefs.DeleteKey("password");
+    }
+
+    public void OnLogoutForced()
+    {
+        PlayFabClientAPI.ForgetAllCredentials();
+
+        PlayerPrefs.DeleteKey("username");
+        PlayerPrefs.DeleteKey("password");
     }
 
 #if !UNITY_IOS
@@ -73,6 +93,7 @@ public class playfabManager : GenericSingletonClass<playfabManager>
                 },
                 res =>
                 {
+                    saveuser("player@gmail.com", "killprg1");
                     callbackSuccess();
                 },
                 err =>
@@ -149,6 +170,7 @@ public class playfabManager : GenericSingletonClass<playfabManager>
         PlayFabClientAPI.RegisterPlayFabUser(req,
         res =>
         {
+            saveuser(email, password);
             callbackSuccess();
         },
         err =>
